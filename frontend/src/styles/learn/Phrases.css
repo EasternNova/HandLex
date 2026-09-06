@@ -1,0 +1,257 @@
+/* =========================
+   PHRASES PAGE
+========================= */
+
+.phrases-page {
+  min-height: 100vh;
+  padding: 120px 8% 90px;
+  background: var(--cream);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.phrases-header {
+  max-width: 800px;
+  margin-bottom: 80px;
+}
+
+.phrases-header h1 {
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  margin: 15px 0 25px;
+}
+
+.phrases-header h1 span {
+  color: var(--orange);
+}
+
+.phrases-header > p:last-child {
+  color: var(--grey);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.phrases-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.phrases-section .section-heading {
+  margin-bottom: 45px;
+}
+
+.phrases-section .section-heading h2 {
+  margin-bottom: 15px;
+}
+
+.phrases-section .section-heading h2 span {
+  color: var(--orange);
+}
+
+
+/* =========================
+   PHRASE GRID
+========================= */
+
+.phrases-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+
+/* =========================
+   PHRASE CARD
+========================= */
+
+.phrase-card {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+
+  padding: 25px;
+  min-height: 390px;
+
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.phrase-card:hover {
+  transform: translateY(-5px);
+  border-color: #d8d8d8;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================
+   CARD TOP
+========================= */
+
+.phrase-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.phrase-card-top span {
+  color: var(--orange);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+
+/* =========================
+   SIGN PLACEHOLDER
+========================= */
+
+.phrase-sign-placeholder {
+  width: 135px;
+  height: 135px;
+
+  margin: 30px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #f1f1ed;
+
+  font-size: 4rem;
+}
+
+
+/* =========================
+   CARD CONTENT
+========================= */
+
+.phrase-card-content {
+  margin-top: auto;
+}
+
+.phrase-card-content h3 {
+  font-size: 1.4rem;
+  margin: 0 0 10px;
+}
+
+.phrase-card-content p {
+  color: var(--grey);
+  line-height: 1.6;
+  font-size: 14px;
+
+  margin: 0 0 20px;
+}
+
+.phrase-card-content .secondary-button {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.phrases-cta {
+  max-width: 1200px;
+  margin: 100px auto 0;
+
+  padding: 55px 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+
+  background: #171717;
+  color: white;
+
+  border-radius: 22px;
+}
+
+.phrases-cta .eyebrow {
+  color: #999;
+  margin-bottom: 15px;
+}
+
+.phrases-cta h2 {
+  max-width: 650px;
+  margin: 0;
+
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.phrases-cta h2 span {
+  color: var(--orange);
+}
+
+.phrases-cta .primary-button {
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .phrases-page {
+    padding: 100px 6% 70px;
+  }
+
+  .phrases-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .phrases-cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .phrases-page {
+    padding: 90px 5% 60px;
+  }
+
+  .phrases-header {
+    margin-bottom: 60px;
+  }
+
+  .phrases-header h1 {
+    font-size: 3.5rem;
+  }
+
+  .phrase-card {
+    min-height: 360px;
+  }
+
+  .phrases-cta {
+    padding: 35px 25px;
+    margin-top: 70px;
+  }
+}

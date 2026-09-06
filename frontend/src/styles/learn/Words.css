@@ -1,0 +1,359 @@
+/* =========================
+   WORDS PAGE
+========================= */
+
+.words-page {
+  min-height: 100vh;
+  padding: 120px 8% 90px;
+  background: var(--cream);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.words-header {
+  max-width: 800px;
+  margin-bottom: 70px;
+}
+
+.words-header h1 {
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  margin: 15px 0 25px;
+}
+
+.words-header h1 span {
+  color: var(--orange);
+}
+
+.words-header > p:last-child {
+  color: var(--grey);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+
+/* =========================
+   WORDS SECTION
+========================= */
+
+.words-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.words-tools {
+  margin-bottom: 30px;
+}
+
+.words-search {
+  width: 100%;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #ffffff;
+  border: 1px solid #dcdcd7;
+  border-radius: 12px;
+
+  padding: 0 18px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.words-search:focus-within {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(242, 140, 40, 0.1);
+}
+
+.words-search > span {
+  font-size: 24px;
+  color: #888;
+  line-height: 1;
+}
+
+.words-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+
+  color: var(--black);
+  font-size: 15px;
+}
+
+.words-search input::placeholder {
+  color: #999;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.word-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.word-filters button {
+  border: 1px solid #d5d5d0;
+  background: transparent;
+
+  padding: 9px 16px;
+  border-radius: 8px;
+
+  color: #555;
+  font-size: 13px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.word-filters button:hover {
+  border-color: var(--orange);
+  color: var(--orange-dark);
+}
+
+.word-filters button.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: white;
+}
+
+
+/* =========================
+   RESULT INFO
+========================= */
+
+.words-result-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  min-height: 30px;
+  margin-bottom: 18px;
+
+  color: var(--grey);
+  font-size: 13px;
+}
+
+.words-result-info span:first-child {
+  font-weight: 700;
+  color: #555;
+}
+
+
+/* =========================
+   WORD GRID
+========================= */
+
+.words-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+/* =========================
+   WORD CARD
+========================= */
+
+.word-card {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+
+  padding: 25px;
+  min-height: 390px;
+
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.word-card:hover {
+  transform: translateY(-5px);
+  border-color: #d8d8d8;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.07);
+}
+
+
+/* =========================
+   CARD TOP
+========================= */
+
+.word-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.word-card-top > span:first-child {
+  color: var(--orange);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.word-card-number {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #fff1df;
+
+  color: var(--orange-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* =========================
+   SIGN PLACEHOLDER
+========================= */
+
+.word-sign-placeholder {
+  width: 135px;
+  height: 135px;
+
+  margin: 30px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #f1f1ed;
+
+  font-size: 4rem;
+}
+
+
+/* =========================
+   CARD CONTENT
+========================= */
+
+.word-card-content {
+  margin-top: auto;
+}
+
+.word-card-content h3 {
+  font-size: 1.5rem;
+  margin: 0 0 8px;
+}
+
+.word-card-content p {
+  color: var(--grey);
+  line-height: 1.6;
+  font-size: 14px;
+
+  margin: 0 0 20px;
+}
+
+.word-card-content .secondary-button {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.words-empty {
+  padding: 80px 20px;
+
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+
+  text-align: center;
+}
+
+.words-empty > div {
+  font-size: 45px;
+  color: #aaa;
+}
+
+.words-empty h3 {
+  margin: 20px 0 8px;
+  font-size: 1.5rem;
+}
+
+.words-empty p {
+  color: var(--grey);
+  margin: 0 0 25px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .words-page {
+    padding: 100px 6% 70px;
+  }
+
+  .words-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .words-page {
+    padding: 90px 5% 60px;
+  }
+
+  .words-header {
+    margin-bottom: 55px;
+  }
+
+  .words-header h1 {
+    font-size: 3.5rem;
+  }
+
+  .words-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .words-result-info {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .word-card {
+    min-height: 360px;
+  }
+}

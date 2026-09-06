@@ -1,0 +1,247 @@
+/* =========================
+   TRANSLATE PAGE
+========================= */
+
+.translate-page {
+  min-height: 100vh;
+  padding: 120px 8% 80px;
+  background: var(--cream);
+}
+
+.translate-header {
+  max-width: 750px;
+  margin-bottom: 50px;
+}
+
+.translate-header h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  margin: 12px 0 20px;
+}
+
+.translate-header h1 span {
+  color: var(--orange);
+}
+
+.translate-header > p:last-child {
+  color: var(--grey);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+.translator-container {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.translator-camera,
+.translation-result {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.camera-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e5e5e5;
+  font-weight: 600;
+}
+
+.camera-status {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--grey);
+  font-weight: 400;
+}
+
+.camera-screen {
+  min-height: 430px;
+  background: #171717;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+}
+
+.camera-screen h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.camera-screen p {
+  color: #aaa;
+  max-width: 400px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.result-header .eyebrow {
+  margin: 0;
+}
+
+.result-header > span {
+  background: #fff1df;
+  color: var(--orange-dark);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.result-content {
+  min-height: 330px;
+  padding: 35px 25px;
+}
+
+.result-content small,
+.confidence-box small {
+  display: block;
+  color: var(--grey);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.result-content h2 {
+  font-size: 3rem;
+  margin: 0 0 15px;
+}
+
+.result-content p {
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+.confidence-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #e5e5e5;
+  border-top: 1px solid #e5e5e5;
+}
+
+.confidence-box > div {
+  background: #fff;
+  padding: 20px 25px;
+}
+
+.confidence-box strong {
+  font-size: 1.1rem;
+}
+
+.translate-instructions {
+  max-width: 1200px;
+  margin: 70px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.translate-instructions > div {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.translate-instructions span {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.translate-instructions h3 {
+  margin: 15px 0 8px;
+}
+
+.translate-instructions p {
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+/* =========================
+   TRANSLATE RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .translator-container {
+    grid-template-columns: 1fr;
+  }
+
+  .translate-instructions {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .translate-page {
+    padding: 100px 5% 60px;
+  }
+
+  .camera-screen {
+    min-height: 350px;
+  }
+
+  .result-content {
+    min-height: 250px;
+  }
+}
+
+/* =========================
+   CAMERA VIDEO
+========================= */
+
+.camera-video {
+  display: none;
+  width: 100%;
+  height: 430px;
+  object-fit: cover;
+}
+
+.camera-video-active {
+  display: block;
+}
+
+.stop-camera-button {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.camera-error {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  color: #ffb4b4 !important;
+  margin: 0 !important;
+  text-align: center;
+  z-index: 20;
+}

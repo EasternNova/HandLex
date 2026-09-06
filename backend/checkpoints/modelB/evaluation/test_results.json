@@ -1,0 +1,16 @@
+{
+    "checkpoint": "backend/checkpoints/modelB/best_model.pth",
+    "checkpoint_epoch": 48,
+    "num_classes": 100,
+    "test_samples": 100,
+    "test_loss": 3.776026153564453,
+    "top1_accuracy": 0.1,
+    "top5_accuracy": 0.36,
+    "correct_top1": 10,
+    "correct_top5": 36,
+    "average_confidence": 0.22749287366867066,
+    "represented_test_classes": 72,
+    "macro_accuracy": 0.1111111111111111,
+    "best_validation_accuracy": 0.13333333333333333,
+    "best_validation_loss": 3.7306853248959495
+}

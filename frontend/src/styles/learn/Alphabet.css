@@ -1,0 +1,146 @@
+/* =========================
+   ALPHABET PAGE
+========================= */
+
+.alphabet-page {
+  min-height: 100vh;
+  padding: 120px 8% 80px;
+  background: var(--cream);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.alphabet-header {
+  max-width: 800px;
+  margin-bottom: 70px;
+}
+
+.alphabet-header h1 {
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  margin: 15px 0 25px;
+}
+
+.alphabet-header h1 span {
+  color: var(--orange);
+}
+
+.alphabet-header > p:last-child {
+  color: var(--grey);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+
+/* =========================
+   ALPHABET GRID
+========================= */
+
+.alphabet-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.alphabet-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  padding: 25px;
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.alphabet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.07);
+}
+
+.letter {
+  align-self: flex-start;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.sign-placeholder {
+  width: 110px;
+  height: 110px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff1df;
+  border-radius: 50%;
+
+  font-size: 3.2rem;
+}
+
+.alphabet-card h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.alphabet-card .secondary-button {
+  width: 100%;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .alphabet-page {
+    padding: 100px 6% 70px;
+  }
+
+  .alphabet-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .alphabet-page {
+    padding: 90px 5% 60px;
+  }
+
+  .alphabet-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .alphabet-card {
+    min-height: 250px;
+    padding: 20px;
+  }
+
+  .sign-placeholder {
+    width: 85px;
+    height: 85px;
+    font-size: 2.5rem;
+  }
+}

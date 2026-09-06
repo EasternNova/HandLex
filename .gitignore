@@ -1,0 +1,49 @@
+MY_IDEAS/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# Data
+dataset/
+data/
+
+# Model files
+models/checkpoints/
+models/pretrained/
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.pickle
+
+# Python / ML generated files
+*.joblib
+*.h5
+*.keras
+
+# Node / React / Vite
+node_modules/
+dist/
+build/
+.vite/
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
