@@ -18,7 +18,7 @@ The system is intended to recognize individual sign-language gestures and provid
 
 ---
 
-## ✨ Planned Features
+## ✨ Current Features
 
 - 🤟 Sign language gesture recognition
 - 🎥 Video-based gesture analysis
@@ -209,7 +209,7 @@ The trained model receives a new video/webcam sequence and predicts the correspo
 
 # 🖥️ Application
 
-The planned HandLex interface will allow users to interact with the trained model through a simple web interface.
+The HandLex interface is currently being developed as a React + Vite frontend, while the ML backend and inference components are developed separately.
 
 Possible workflow:
 
@@ -229,7 +229,7 @@ Prediction
 Display Recognized Word
 ```
 
-The ML application can be developed using **Streamlit**, while the main project website is developed using **React + Vite**.
+The main HandLex website is currently developed using **React + Vite**. The ML backend is being developed separately under `backend/` and will later be connected to the frontend.
 
 ---
 
@@ -290,20 +290,27 @@ pip install -r requirements.txt
 
 # ▶️ Running HandLex
 
-### Run the Streamlit application
+### Run the frontend
+
+From the `frontend` directory:
 
 ```bash
-streamlit run app/app.py
-```
-
-### Run the website
-
-From the website directory:
-
-```bash
+cd frontend
 npm install
 npm run dev
 ```
+
+### Run ML / backend components
+
+Backend code is organized under:
+
+```text
+backend/src/
+```
+
+Model-specific training, testing, and webcam inference scripts are located inside the corresponding model directories.
+
+> Exact dataset-dependent commands vary with the local dataset and model configuration.
 
 ---
 
