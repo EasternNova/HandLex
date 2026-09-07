@@ -1,6 +1,7 @@
 import os
-import yaml
+
 import torch
+import yaml
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
 from .model import ModelB
@@ -14,12 +15,17 @@ from .dataset import Datasets
 CONFIG_PATH = "backend/src/models/modelB/configs/WLASL-100.yaml"
 DATA_ROOT = "dataset/WLASL"
 
-
 BATCH_SIZE = 8
-EPOCHS = 50
+EPOCHS = 80
 
-LEARNING_RATE = 3e-4
-WEIGHT_DECAY = 1e-4
+# Lower learning rate to reduce overfitting
+LEARNING_RATE = 1e-4
+
+# Slightly stronger regularization
+WEIGHT_DECAY = 2e-4
+
+# Stop if validation accuracy does not improve
+EARLY_STOPPING_PATIENCE = 12
 
 CHECKPOINT_DIR = "backend/checkpoints/modelB"
 
@@ -54,6 +60,7 @@ def main():
     print(f"Epochs: {EPOCHS}")
     print(f"Learning rate: {LEARNING_RATE}")
     print(f"Weight decay: {WEIGHT_DECAY}")
+    print(f"Early stopping patience: {EARLY_STOPPING_PATIENCE}")
 
 
     # ========================================================
@@ -86,13 +93,6 @@ def main():
     # ========================================================
     # CLASS-BALANCED SAMPLING
     # ========================================================
-    #
-    # Important:
-    # The sampler MUST be created BEFORE the DataLoader.
-    #
-    # We calculate how frequently each class appears and give
-    # rare classes a higher sampling probability.
-    #
 
     print()
     print("Creating class-balanced sampler...")
@@ -109,12 +109,12 @@ def main():
 
     class_counts = torch.bincount(
         labels_tensor,
-        minlength=config["num_labels"]
+        minlength=config["num_labels"],
     )
 
     class_weights = torch.zeros(
         config["num_labels"],
-        dtype=torch.float
+        dtype=torch.float,
     )
 
     for class_id in range(config["num_labels"]):
@@ -122,7 +122,8 @@ def main():
         if class_counts[class_id] > 0:
 
             class_weights[class_id] = (
-                1.0 / class_counts[class_id].float()
+                1.0
+                / class_counts[class_id].float()
             )
 
     sample_weights = torch.tensor(
@@ -130,7 +131,7 @@ def main():
             class_weights[label].item()
             for label in labels
         ],
-        dtype=torch.double
+        dtype=torch.double,
     )
 
     sampler = WeightedRandomSampler(
@@ -205,7 +206,7 @@ def main():
 
     os.makedirs(
         CHECKPOINT_DIR,
-        exist_ok=True
+        exist_ok=True,
     )
 
 
@@ -215,6 +216,8 @@ def main():
 
     best_val_accuracy = 0.0
     best_val_loss = float("inf")
+
+    epochs_without_improvement = 0
 
 
     # ========================================================
@@ -247,23 +250,15 @@ def main():
         for batch_idx, batch in enumerate(train_loader):
 
             keypoints = batch["keypoints"].to(device)
-
             attention_mask = batch["attention_mask"].to(device)
-
             labels = batch["labels"].to(device)
 
 
-            # ------------------------------------------------
-            # ZERO GRADIENTS
-            # ------------------------------------------------
-
+            # Zero gradients
             optimizer.zero_grad()
 
 
-            # ------------------------------------------------
-            # FORWARD PASS
-            # ------------------------------------------------
-
+            # Forward pass
             loss, logits = model(
                 keypoints=keypoints,
                 attention_mask=attention_mask,
@@ -271,34 +266,22 @@ def main():
             )
 
 
-            # ------------------------------------------------
-            # BACKPROPAGATION
-            # ------------------------------------------------
-
+            # Backpropagation
             loss.backward()
 
 
-            # ------------------------------------------------
-            # GRADIENT CLIPPING
-            # ------------------------------------------------
-
+            # Gradient clipping
             torch.nn.utils.clip_grad_norm_(
                 model.parameters(),
                 max_norm=1.0,
             )
 
 
-            # ------------------------------------------------
-            # OPTIMIZER UPDATE
-            # ------------------------------------------------
-
+            # Optimizer update
             optimizer.step()
 
 
-            # ------------------------------------------------
-            # METRICS
-            # ------------------------------------------------
-
+            # Metrics
             total_loss += loss.item()
 
             predictions = logits.argmax(dim=1)
@@ -308,18 +291,15 @@ def main():
             ).sum().item()
 
             correct += batch_correct
-
             total += labels.size(0)
 
 
-            # ------------------------------------------------
-            # BATCH LOG
-            # ------------------------------------------------
-
+            # Batch log
             if batch_idx % 10 == 0:
 
                 batch_accuracy = (
-                    batch_correct / labels.size(0)
+                    batch_correct
+                    / labels.size(0)
                 )
 
                 print(
@@ -335,11 +315,13 @@ def main():
         # ====================================================
 
         train_loss = (
-            total_loss / len(train_loader)
+            total_loss
+            / len(train_loader)
         )
 
         train_accuracy = (
-            correct / total
+            correct
+            / total
         )
 
 
@@ -359,30 +341,21 @@ def main():
             for batch in val_loader:
 
                 keypoints = batch["keypoints"].to(device)
-
                 attention_mask = batch["attention_mask"].to(device)
-
                 labels = batch["labels"].to(device)
 
 
-                # ------------------------------------------------
-                # VALIDATION FORWARD PASS
-                # ------------------------------------------------
-
+                # Validation forward pass
                 loss, logits = model(
                     keypoints=keypoints,
                     attention_mask=attention_mask,
                     labels=labels,
                 )
 
-
                 val_loss_total += loss.item()
 
 
-                # ------------------------------------------------
-                # VALIDATION PREDICTIONS
-                # ------------------------------------------------
-
+                # Validation predictions
                 predictions = logits.argmax(dim=1)
 
                 val_correct += (
@@ -397,11 +370,13 @@ def main():
         # ====================================================
 
         val_loss = (
-            val_loss_total / len(val_loader)
+            val_loss_total
+            / len(val_loader)
         )
 
         val_accuracy = (
-            val_correct / val_total
+            val_correct
+            / val_total
         )
 
 
@@ -411,7 +386,9 @@ def main():
 
         scheduler.step(val_loss)
 
-        current_lr = optimizer.param_groups[0]["lr"]
+        current_lr = (
+            optimizer.param_groups[0]["lr"]
+        )
 
 
         # ====================================================
@@ -423,13 +400,25 @@ def main():
         print(f"Epoch {epoch + 1} Results")
         print("-" * 60)
 
-        print(f"Train Loss:       {train_loss:.4f}")
-        print(f"Train Accuracy:   {train_accuracy:.4f}")
+        print(
+            f"Train Loss:       {train_loss:.4f}"
+        )
 
-        print(f"Validation Loss:  {val_loss:.4f}")
-        print(f"Validation Acc:   {val_accuracy:.4f}")
+        print(
+            f"Train Accuracy:   {train_accuracy:.4f}"
+        )
 
-        print(f"Learning Rate:    {current_lr:.8f}")
+        print(
+            f"Validation Loss:  {val_loss:.4f}"
+        )
+
+        print(
+            f"Validation Acc:   {val_accuracy:.4f}"
+        )
+
+        print(
+            f"Learning Rate:    {current_lr:.8f}"
+        )
 
 
         # ====================================================
@@ -438,31 +427,24 @@ def main():
 
         checkpoint_path = os.path.join(
             CHECKPOINT_DIR,
-            f"epoch_{epoch + 1}.pth"
+            f"epoch_{epoch + 1}.pth",
         )
 
         torch.save(
             {
                 "epoch": epoch + 1,
-
                 "model_state_dict":
                     model.state_dict(),
-
                 "optimizer_state_dict":
                     optimizer.state_dict(),
-
                 "train_loss":
                     train_loss,
-
                 "val_loss":
                     val_loss,
-
                 "train_accuracy":
                     train_accuracy,
-
                 "val_accuracy":
                     val_accuracy,
-
                 "config":
                     config,
             },
@@ -477,44 +459,35 @@ def main():
         if val_accuracy > best_val_accuracy:
 
             best_val_accuracy = val_accuracy
-
             best_val_loss = val_loss
 
+            epochs_without_improvement = 0
 
             best_checkpoint_path = os.path.join(
                 CHECKPOINT_DIR,
-                "best_model.pth"
+                "best_model.pth",
             )
-
 
             torch.save(
                 {
                     "epoch": epoch + 1,
-
                     "model_state_dict":
                         model.state_dict(),
-
                     "optimizer_state_dict":
                         optimizer.state_dict(),
-
                     "train_loss":
                         train_loss,
-
                     "val_loss":
                         val_loss,
-
                     "train_accuracy":
                         train_accuracy,
-
                     "val_accuracy":
                         val_accuracy,
-
                     "config":
                         config,
                 },
                 best_checkpoint_path,
             )
-
 
             print()
             print("★ NEW BEST MODEL")
@@ -529,12 +502,55 @@ def main():
                 f"{best_checkpoint_path}"
             )
 
+        else:
+
+            epochs_without_improvement += 1
+
+            print()
+            print(
+                f"No validation improvement "
+                f"for {epochs_without_improvement} "
+                f"epoch(s)."
+            )
+
 
         print()
         print(
             f"Checkpoint saved: "
             f"{checkpoint_path}"
         )
+
+
+        # ====================================================
+        # EARLY STOPPING
+        # ====================================================
+
+        if (
+            epochs_without_improvement
+            >= EARLY_STOPPING_PATIENCE
+        ):
+
+            print()
+            print("=" * 60)
+            print("EARLY STOPPING")
+            print("=" * 60)
+
+            print(
+                "Validation accuracy has not "
+                "improved recently."
+            )
+
+            print(
+                f"Best validation accuracy: "
+                f"{best_val_accuracy:.4f}"
+            )
+
+            print(
+                f"Best epoch saved in: "
+                f"{os.path.join(CHECKPOINT_DIR, 'best_model.pth')}"
+            )
+
+            break
 
 
     # ========================================================
