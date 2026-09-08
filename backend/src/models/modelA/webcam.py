@@ -7,6 +7,7 @@ from pathlib import Path
 import cv2
 import joblib
 import mediapipe as mp
+
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
@@ -14,7 +15,8 @@ from features import make_feature_vector
 
 
 # ============================================================
-# PATHS / CONFIGURATION
+# HandLex ModelA V5.1
+# Diagnostic Webcam
 # ============================================================
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -26,23 +28,16 @@ DEFAULT_MODEL = (
     / "hand_landmarker.task"
 )
 
-# Number of recent predictions considered for smoothing.
 HISTORY_SIZE = 7
-
-# Minimum number of identical predictions required inside
-# the history window before a prediction is considered stable.
 STABLE_COUNT = 5
-
-# Minimum confidence required for a hand prediction.
 CONFIDENCE_THRESHOLD = 0.50
 
 
 # ============================================================
-# MEDIAPIPE HAND DETECTOR
+# MediaPipe
 # ============================================================
 
 def create_detector():
-
     options = vision.HandLandmarkerOptions(
         base_options=python.BaseOptions(
             model_asset_path=str(DEFAULT_MODEL)
@@ -54,181 +49,83 @@ def create_detector():
         min_tracking_confidence=0.5,
     )
 
-    return vision.HandLandmarker.create_from_options(
-        options
-    )
+    return vision.HandLandmarker.create_from_options(options)
 
 
 # ============================================================
-# TEMPORAL SMOOTHER
+# Temporal smoothing
 # ============================================================
 
 class TemporalSmoother:
 
-    def __init__(
-        self,
-        history_size=HISTORY_SIZE,
-        stable_count=STABLE_COUNT,
-    ):
-
+    def __init__(self):
         self.history = collections.deque(
-            maxlen=history_size
+            maxlen=HISTORY_SIZE
         )
 
-        self.stable_count = stable_count
-
-        # Last prediction that was accepted as stable.
-        self.stable_prediction = "nothing"
-
-        # Last prediction that was committed to the sentence.
         self.last_committed = None
 
     def update(self, prediction):
-
         self.history.append(prediction)
 
-        if len(self.history) < self.stable_count:
-            return "nothing"
+        counts = collections.Counter(self.history)
 
-        counts = collections.Counter(
-            self.history
-        )
+        stable, count = counts.most_common(1)[0]
 
-        candidate, count = counts.most_common(1)[0]
+        is_stable = count >= STABLE_COUNT
 
-        if count >= self.stable_count:
-            self.stable_prediction = candidate
+        return stable, count, is_stable
 
-        return self.stable_prediction
+    def reset_commit(self):
+        """
+        Called when the hand is released.
 
-    def should_commit(self, prediction):
-
-        if prediction == "nothing":
-            return False
-
-        if prediction == self.last_committed:
-            return False
-
-        self.last_committed = prediction
-
-        return True
-
-    def reset_commit_state(self):
-
-        self.last_committed = None
-
-    def clear(self):
-
-        self.history.clear()
-        self.stable_prediction = "nothing"
+        This allows the same sign to be committed again:
+            A -> nothing -> A
+        """
         self.last_committed = None
 
 
 # ============================================================
-# SENTENCE HANDLING
-# ============================================================
-
-def commit_prediction(
-    prediction,
-    sentence,
-):
-
-    if prediction == "nothing":
-        return
-
-    if prediction == "space":
-
-        # Avoid multiple consecutive spaces.
-        if sentence and sentence[-1] != " ":
-            sentence.append(" ")
-
-    elif prediction == "del":
-
-        if sentence:
-            sentence.pop()
-
-    else:
-
-        sentence.append(prediction)
-
-
-# ============================================================
-# MAIN WEBCAM LOOP
+# Main
 # ============================================================
 
 def main(model_path: Path):
 
-    # --------------------------------------------------------
-    # LOAD MODEL
-    # --------------------------------------------------------
-
     print("=" * 60)
-    print("HandLex ModelA V5")
+    print("HandLex ModelA V5.1 — Diagnostic Webcam")
     print("=" * 60)
 
     print()
-    print(f"Model: {model_path.resolve()}")
+    print(f"Model: {model_path}")
 
     package = joblib.load(model_path)
 
     clf = package["model"]
     classes = package["classes"]
-    version = int(
-        package["feature_version"]
-    )
+    version = int(package["feature_version"])
 
-    print(
-        f"Feature version: V{version}"
-    )
+    print(f"Feature version: V{version}")
+    print(f"Features: {clf.n_features_in_}")
+    print(f"Classes: {len(classes)}")
 
-    print(
-        f"Features: "
-        f"{clf.n_features_in_}"
-    )
-
-    print(
-        f"Classes: "
-        f"{len(classes)}"
-    )
-
-    if version != 3:
-        print()
-        print(
-            "WARNING: V5 is designed "
-            "for the V3 feature model."
-        )
-
-    # --------------------------------------------------------
-    # CREATE DETECTOR
-    # --------------------------------------------------------
+    print()
+    print("Loading MediaPipe...")
 
     detector = create_detector()
-
-    # --------------------------------------------------------
-    # OPEN WEBCAM
-    # --------------------------------------------------------
 
     cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
-        detector.close()
         raise RuntimeError(
-            "Could not open webcam"
+            "Could not open webcam."
         )
-
-    # --------------------------------------------------------
-    # V5 STATE
-    # --------------------------------------------------------
 
     smoother = TemporalSmoother()
 
     sentence = []
 
     timestamp_ms = 0
-
-    # --------------------------------------------------------
-    # INFORMATION
-    # --------------------------------------------------------
 
     print()
     print("Webcam started.")
@@ -239,276 +136,280 @@ def main(model_path: Path):
     print("  SPACE = Commit space sign")
     print("  DEL   = Delete last character")
     print()
-    print(
-        f"Temporal history: "
-        f"{HISTORY_SIZE} frames"
-    )
-    print(
-        f"Stable threshold: "
-        f"{STABLE_COUNT} frames"
-    )
+    print(f"Temporal history: {HISTORY_SIZE} frames")
+    print(f"Stable threshold: {STABLE_COUNT} frames")
+    print()
+    print("Diagnostic mode:")
+    print("  Hand detection")
+    print("  Handedness")
+    print("  Raw prediction")
+    print("  Confidence")
+    print("  Top 3 predictions")
+    print("  Stable prediction")
     print()
 
     try:
 
         while True:
 
-            # =================================================
-            # READ FRAME
-            # =================================================
-
             ok, frame = cap.read()
 
             if not ok:
-                print(
-                    "Could not read webcam frame."
-                )
+                print("Could not read webcam frame.")
                 break
 
-            # =================================================
-            # MIRROR FRAME
-            # =================================================
-
-            frame = cv2.flip(
-                frame,
-                1,
-            )
-
-            # =================================================
-            # MEDIAPIPE
-            # =================================================
+            # Mirror webcam for natural interaction
+            frame = cv2.flip(frame, 1)
 
             rgb = cv2.cvtColor(
                 frame,
-                cv2.COLOR_BGR2RGB,
+                cv2.COLOR_BGR2RGB
             )
 
             image = mp.Image(
                 image_format=mp.ImageFormat.SRGB,
-                data=rgb,
+                data=rgb
             )
 
             timestamp_ms += 33
 
             result = detector.detect_for_video(
                 image,
-                timestamp_ms,
+                timestamp_ms
             )
 
-            # =================================================
-            # DEFAULT PREDICTION
-            # =================================================
-
-            pred = "nothing"
-            conf = 1.0
-
-            # =================================================
+            # ------------------------------------------------
             # HAND DETECTED
-            # =================================================
+            # ------------------------------------------------
 
             if result.hand_landmarks:
 
-                landmarks = (
-                    result.hand_landmarks[0]
-                )
+                landmarks = result.hand_landmarks[0]
 
                 handedness = None
 
                 try:
-
                     handedness = (
-                        result
-                        .handedness[0][0]
-                        .category_name
+                        result.handedness[0][0].category_name
                     )
-
                 except Exception:
                     pass
-
-                # ------------------------------------------------
-                # CREATE V3 FEATURES
-                # ------------------------------------------------
 
                 x = make_feature_vector(
                     landmarks,
                     handedness,
                     version,
-                ).reshape(
-                    1,
-                    -1,
+                ).reshape(1, -1)
+
+                # Raw probabilities
+                probabilities = clf.predict_proba(x)[0]
+
+                ranked = probabilities.argsort()[::-1]
+
+                best_idx = int(ranked[0])
+
+                raw_prediction = classes[best_idx]
+
+                confidence = float(
+                    probabilities[best_idx]
                 )
 
-                # ------------------------------------------------
-                # MODEL PREDICTION
-                # ------------------------------------------------
+                # Top 3
+                top3 = []
 
-                probs = clf.predict_proba(x)[0]
+                for idx in ranked[:3]:
 
-                idx = int(
-                    probs.argmax()
+                    label = classes[int(idx)]
+
+                    probability = float(
+                        probabilities[int(idx)]
+                    )
+
+                    top3.append(
+                        (label, probability)
+                    )
+
+                # Temporal smoothing
+                stable, stable_count, is_stable = (
+                    smoother.update(raw_prediction)
                 )
 
-                pred = classes[idx]
+                # Commit only after stable prediction
+                if (
+                    is_stable
+                    and confidence >= CONFIDENCE_THRESHOLD
+                    and stable != "nothing"
+                    and stable != smoother.last_committed
+                ):
 
-                conf = float(
-                    probs[idx]
+                    if stable == "space":
+
+                        sentence.append(" ")
+
+                    elif stable == "del":
+
+                        if sentence:
+                            sentence.pop()
+
+                    else:
+
+                        sentence.append(stable)
+
+                    smoother.last_committed = stable
+
+                # ------------------------------------------------
+                # DISPLAY
+                # ------------------------------------------------
+
+                cv2.putText(
+                    frame,
+                    "HAND: YES",
+                    (20, 35),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8,
+                    (0, 255, 0),
+                    2,
                 )
 
-                # ------------------------------------------------
-                # LOW CONFIDENCE → NOTHING
-                # ------------------------------------------------
+                cv2.putText(
+                    frame,
+                    f"Handedness: {handedness}",
+                    (20, 65),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.65,
+                    (255, 255, 255),
+                    2,
+                )
 
-                if conf < CONFIDENCE_THRESHOLD:
+                cv2.putText(
+                    frame,
+                    f"RAW: {raw_prediction} "
+                    f"({confidence * 100:.1f}%)",
+                    (20, 105),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8,
+                    (0, 255, 255),
+                    2,
+                )
 
-                    pred = "nothing"
+                cv2.putText(
+                    frame,
+                    "TOP 3:",
+                    (20, 145),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.65,
+                    (255, 255, 255),
+                    2,
+                )
 
-            # =================================================
+                y_position = 175
+
+                for label, probability in top3:
+
+                    cv2.putText(
+                        frame,
+                        f"{label}: "
+                        f"{probability * 100:.1f}%",
+                        (35, y_position),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.6,
+                        (255, 255, 255),
+                        2,
+                    )
+
+                    y_position += 28
+
+                cv2.putText(
+                    frame,
+                    f"STABLE: {stable} "
+                    f"({stable_count}/{HISTORY_SIZE})",
+                    (20, 270),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.75,
+                    (255, 255, 0),
+                    2,
+                )
+
+            # ------------------------------------------------
             # NO HAND
-            # =================================================
+            # ------------------------------------------------
 
             else:
 
-                pred = "nothing"
-                conf = 1.0
-
-            # =================================================
-            # TEMPORAL SMOOTHING
-            # =================================================
-
-            stable = smoother.update(
-                pred
-            )
-
-            # =================================================
-            # COMMIT STABLE PREDICTION
-            # =================================================
-
-            if smoother.should_commit(
-                stable
-            ):
-
-                commit_prediction(
-                    stable,
-                    sentence,
+                stable, stable_count, is_stable = (
+                    smoother.update("nothing")
                 )
 
-            # =================================================
-            # DISPLAY
-            # =================================================
+                # IMPORTANT:
+                # Hand release resets the commit gate.
+                smoother.reset_commit()
 
-            sentence_text = "".join(
-                sentence
+                cv2.putText(
+                    frame,
+                    "HAND: NO",
+                    (20, 35),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8,
+                    (0, 0, 255),
+                    2,
+                )
+
+                cv2.putText(
+                    frame,
+                    "RAW: nothing",
+                    (20, 75),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8,
+                    (255, 255, 255),
+                    2,
+                )
+
+            # ------------------------------------------------
+            # SENTENCE
+            # ------------------------------------------------
+
+            text = "".join(sentence)
+
+            cv2.rectangle(
+                frame,
+                (10, 320),
+                (1250, 390),
+                (0, 0, 0),
+                -1,
             )
-
-            # ------------------------------------------------
-            # Prediction
-            # ------------------------------------------------
 
             cv2.putText(
                 frame,
-                f"Prediction: {pred}",
-                (20, 40),
+                f"TEXT: {text}",
+                (25, 365),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.8,
-                (0, 255, 0),
-                2,
-            )
-
-            # ------------------------------------------------
-            # Confidence
-            # ------------------------------------------------
-
-            cv2.putText(
-                frame,
-                f"Confidence: {conf:.2f}",
-                (20, 75),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.7,
-                (0, 255, 0),
-                2,
-            )
-
-            # ------------------------------------------------
-            # Stable prediction
-            # ------------------------------------------------
-
-            cv2.putText(
-                frame,
-                f"Stable: {stable}",
-                (20, 110),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.8,
-                (255, 255, 0),
-                2,
-            )
-
-            # ------------------------------------------------
-            # Sentence
-            # ------------------------------------------------
-
-            cv2.putText(
-                frame,
-                f"Text: {sentence_text}",
-                (20, 150),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.8,
+                0.9,
                 (255, 255, 255),
                 2,
             )
 
-            # ------------------------------------------------
-            # Controls
-            # ------------------------------------------------
-
-            cv2.putText(
-                frame,
-                "Q: Quit   C: Clear",
-                (20, 185),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.6,
-                (200, 200, 200),
-                1,
-            )
-
-            # =================================================
-            # SHOW WINDOW
-            # =================================================
-
             cv2.imshow(
-                "HandLex ModelA V5",
-                frame,
+                "HandLex ModelA V5.1 Diagnostic",
+                frame
             )
 
-            # =================================================
-            # KEYBOARD
-            # =================================================
-
-            key = (
-                cv2.waitKey(1)
-                & 0xFF
-            )
-
-            # ------------------------------------------------
-            # QUIT
-            # ------------------------------------------------
+            key = cv2.waitKey(1) & 0xFF
 
             if key == ord("q"):
-
                 break
 
-            # ------------------------------------------------
-            # CLEAR SENTENCE
-            # ------------------------------------------------
-
-            if key == ord("c"):
-
+            elif key == ord("c"):
                 sentence.clear()
+                smoother.reset_commit()
 
-                smoother.reset_commit_state()
+            elif key == 32:
+                sentence.append(" ")
 
-                print(
-                    "Sentence cleared."
-                )
+            # Backspace / DEL
+            elif key in (8, 127):
+
+                if sentence:
+                    sentence.pop()
 
     finally:
 
@@ -525,12 +426,7 @@ def main(model_path: Path):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(
-        description=(
-            "HandLex ModelA V5 "
-            "temporal smoothing webcam"
-        )
-    )
+    parser = argparse.ArgumentParser()
 
     parser.add_argument(
         "--model",
@@ -541,6 +437,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(
-        args.model
-    )
+    main(args.model)
