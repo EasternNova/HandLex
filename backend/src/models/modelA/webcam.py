@@ -16,7 +16,7 @@ from features import make_feature_vector
 
 # ============================================================
 # HandLex ModelA V5.1
-# Diagnostic Webcam
+# Diagnostic Webcam + Live Hand Landmarks
 # ============================================================
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -53,6 +53,120 @@ def create_detector():
 
 
 # ============================================================
+# Draw MediaPipe hand landmarks
+# ============================================================
+
+def draw_hand_landmarks(frame, landmarks):
+    """
+    Draw the 21 MediaPipe hand landmarks and their connections
+    directly on the live webcam frame.
+    """
+
+    height, width = frame.shape[:2]
+
+    # MediaPipe hand connections
+    connections = [
+        (0, 1), (1, 2), (2, 3), (3, 4),       # Thumb
+        (0, 5), (5, 6), (6, 7), (7, 8),       # Index
+        (0, 9), (9, 10), (10, 11), (11, 12),  # Middle
+        (0, 13), (13, 14), (14, 15), (15, 16),# Ring
+        (0, 17), (17, 18), (18, 19), (19, 20),# Pinky
+        (5, 9), (9, 13), (13, 17),            # Palm
+    ]
+
+    points = []
+
+    for landmark in landmarks:
+
+        x = int(landmark.x * width)
+        y = int(landmark.y * height)
+
+        points.append((x, y))
+
+    # Draw connections
+    for start, end in connections:
+
+        cv2.line(
+            frame,
+            points[start],
+            points[end],
+            (0, 255, 0),
+            2,
+            cv2.LINE_AA,
+        )
+
+    # Draw landmark points
+    for index, point in enumerate(points):
+
+        cv2.circle(
+            frame,
+            point,
+            5,
+            (0, 0, 255),
+            -1,
+            cv2.LINE_AA,
+        )
+
+        # Small landmark number
+        cv2.putText(
+            frame,
+            str(index),
+            (point[0] + 6, point[1] - 6),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.35,
+            (255, 255, 255),
+            1,
+            cv2.LINE_AA,
+        )
+
+
+# ============================================================
+# Translucent text panel
+# ============================================================
+
+def draw_translucent_text_panel(frame, text):
+    """
+    Draw a smaller translucent panel for the interpreted text.
+    """
+
+    overlay = frame.copy()
+
+    # Smaller panel
+    x1, y1 = 15, 315
+    x2, y2 = 950, 365
+
+    cv2.rectangle(
+        overlay,
+        (x1, y1),
+        (x2, y2),
+        (0, 0, 0),
+        -1,
+    )
+
+    # Transparency
+    alpha = 0.55
+
+    frame[:] = cv2.addWeighted(
+        overlay,
+        alpha,
+        frame,
+        1 - alpha,
+        0,
+    )
+
+    cv2.putText(
+        frame,
+        f"TEXT: {text}",
+        (28, 349),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.65,
+        (255, 255, 255),
+        2,
+        cv2.LINE_AA,
+    )
+
+
+# ============================================================
 # Temporal smoothing
 # ============================================================
 
@@ -66,6 +180,7 @@ class TemporalSmoother:
         self.last_committed = None
 
     def update(self, prediction):
+
         self.history.append(prediction)
 
         counts = collections.Counter(self.history)
@@ -81,8 +196,10 @@ class TemporalSmoother:
         Called when the hand is released.
 
         This allows the same sign to be committed again:
+
             A -> nothing -> A
         """
+
         self.last_committed = None
 
 
@@ -94,6 +211,7 @@ def main(model_path: Path):
 
     print("=" * 60)
     print("HandLex ModelA V5.1 — Diagnostic Webcam")
+    print("Live MediaPipe Hand Landmarks Enabled")
     print("=" * 60)
 
     print()
@@ -141,6 +259,7 @@ def main(model_path: Path):
     print()
     print("Diagnostic mode:")
     print("  Hand detection")
+    print("  21 MediaPipe hand landmarks")
     print("  Handedness")
     print("  Raw prediction")
     print("  Confidence")
@@ -185,6 +304,15 @@ def main(model_path: Path):
             if result.hand_landmarks:
 
                 landmarks = result.hand_landmarks[0]
+
+                # ------------------------------------------------
+                # LIVE MEDIAPIPE LANDMARK VISUALIZATION
+                # ------------------------------------------------
+
+                draw_hand_landmarks(
+                    frame,
+                    landmarks,
+                )
 
                 handedness = None
 
@@ -340,8 +468,7 @@ def main(model_path: Path):
                     smoother.update("nothing")
                 )
 
-                # IMPORTANT:
-                # Hand release resets the commit gate.
+                # Hand release resets commit gate
                 smoother.reset_commit()
 
                 cv2.putText(
@@ -370,22 +497,9 @@ def main(model_path: Path):
 
             text = "".join(sentence)
 
-            cv2.rectangle(
+            draw_translucent_text_panel(
                 frame,
-                (10, 320),
-                (1250, 390),
-                (0, 0, 0),
-                -1,
-            )
-
-            cv2.putText(
-                frame,
-                f"TEXT: {text}",
-                (25, 365),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.9,
-                (255, 255, 255),
-                2,
+                text,
             )
 
             cv2.imshow(
