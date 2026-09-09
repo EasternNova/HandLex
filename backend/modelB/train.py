@@ -5,14 +5,14 @@ import yaml
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
 from .model import ModelB
-from .dataset import Datasets
+from .data import Datasets
 
 
 # ============================================================
 # CONFIGURATION
 # ============================================================
 
-CONFIG_PATH = "backend/src/models/modelB/configs/WLASL-100.yaml"
+CONFIG_PATH = "backend/modelB/configs/WLASL-100.yaml"
 DATA_ROOT = "dataset/WLASL"
 
 BATCH_SIZE = 8

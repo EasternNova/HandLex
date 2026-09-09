@@ -15,13 +15,11 @@ from mediapipe.tasks.python import vision
 # PATHS
 # ============================================================
 
-VIDEO_DIR = "data/WLASL/videos"
-MODEL_PATH = "data/WLASL/models/holistic_landmarker.task"
-
-OUTPUT_DIR = "data/WLASL"
-
-NSLT_JSON = "data/WLASL/nslt_100.json"
-CLASS_LIST = "data/WLASL/wlasl_class_list.txt"
+VIDEO_DIR = "dataset/WLASL/videos"
+MODEL_PATH = "dataset/WLASL/models/holistic_landmarker.task"
+OUTPUT_DIR = "dataset/WLASL"
+NSLT_JSON = "dataset/WLASL/nslt_100.json"
+CLASS_LIST = "dataset/WLASL/wlasl_class_list.txt"
 
 
 # ============================================================

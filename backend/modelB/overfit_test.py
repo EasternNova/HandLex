@@ -1,12 +1,13 @@
 import torch
+
 from torch.utils.data import DataLoader
 
-from src.models.modelB.model import ModelB
-from src.models.modelB.dataset import Datasets
+from .model import ModelB
+from .data import Datasets
 
 
 CHECKPOINT_PATH = "checkpoints/modelB/epoch_10.pth"
-DATA_ROOT = "data/WLASL"
+DATA_ROOT = "dataset/WLASL"
 
 EPOCHS = 100
 LEARNING_RATE = 1e-3

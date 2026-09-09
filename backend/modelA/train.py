@@ -21,10 +21,7 @@ from sklearn.model_selection import train_test_split
 # HandLex ModelA - Landmark Classifier
 # ============================================================
 
-MODEL_A_DIR = (
-    Path(__file__).resolve().parent
-)
-
+MODEL_A_DIR = Path(__file__).resolve().parent
 BACKEND_ROOT = MODEL_A_DIR.parent
 
 DEFAULT_OUTPUT = (
@@ -83,19 +80,15 @@ def load_data(path: Path):
     ]
 
     for key in required:
-
         if key not in data:
             raise ValueError(
-                f"Dataset missing "
-                f"required field: {key}"
+                f"Dataset missing required field: {key}"
             )
 
     X = data["X"]
     y = data["y"]
 
-    classes = data[
-        "classes"
-    ].tolist()
+    classes = data["classes"].tolist()
 
     version = int(
         data["version"].item()
@@ -163,14 +156,12 @@ def validate_data(
 
     if X.ndim != 2:
         raise ValueError(
-            f"X must be 2D. "
-            f"Got {X.ndim}D."
+            f"X must be 2D. Got {X.ndim}D."
         )
 
     if y.ndim != 1:
         raise ValueError(
-            f"y must be 1D. "
-            f"Got {y.ndim}D."
+            f"y must be 1D. Got {y.ndim}D."
         )
 
     if len(X) != len(y):
@@ -184,26 +175,21 @@ def validate_data(
     # --------------------------------------------------------
 
     if version in (1, 2):
-
         expected_features = 63
 
     elif version == 3:
-
         expected_features = 95
 
     else:
-
         raise ValueError(
-            f"Unsupported feature "
-            f"version: {version}"
+            f"Unsupported feature version: {version}"
         )
 
     if X.shape[1] != expected_features:
         raise ValueError(
             f"V{version} expects "
             f"{expected_features} features, "
-            f"but dataset has "
-            f"{X.shape[1]}."
+            f"but dataset has {X.shape[1]}."
         )
 
     # --------------------------------------------------------
@@ -215,15 +201,13 @@ def validate_data(
         np.number,
     ):
         raise ValueError(
-            "X must contain "
-            "numerical values. "
+            "X must contain numerical values. "
             f"Got dtype: {X.dtype}"
         )
 
     if not np.isfinite(X).all():
         raise ValueError(
-            "X contains NaN or "
-            "infinite values."
+            "X contains NaN or infinite values."
         )
 
     # --------------------------------------------------------
@@ -232,8 +216,7 @@ def validate_data(
 
     if len(classes) != 29:
         raise ValueError(
-            f"Expected 29 classes, "
-            f"got {len(classes)}."
+            f"Expected 29 classes, got {len(classes)}."
         )
 
     if classes != EXPECTED_CLASSES:
@@ -247,22 +230,29 @@ def validate_data(
     # Label validation
     # --------------------------------------------------------
 
-    if len(np.unique(y)) < 2:
+    if not np.issubdtype(
+        y.dtype,
+        np.integer,
+    ):
         raise ValueError(
-            "Dataset must contain "
-            "at least two classes."
+            "y must contain integer class IDs. "
+            f"Got dtype: {y.dtype}"
         )
 
-    unknown_labels = [
-        label
-        for label in np.unique(y)
-        if label not in classes
-    ]
+    unique_labels = np.unique(y)
 
-    if unknown_labels:
+    expected_label_ids = np.arange(
+        len(classes)
+    )
+
+    if not np.array_equal(
+        np.sort(unique_labels),
+        expected_label_ids,
+    ):
         raise ValueError(
-            f"Unknown labels found: "
-            f"{unknown_labels}"
+            "Label IDs do not match the class list.\n\n"
+            f"Found:\n{np.sort(unique_labels)}\n\n"
+            f"Expected:\n{expected_label_ids}"
         )
 
     # --------------------------------------------------------
@@ -275,18 +265,16 @@ def validate_data(
     )
 
     print()
-    print(
-        "Samples per class:"
-    )
+    print("Samples per class:")
 
     for label, count in zip(
         unique,
         counts,
     ):
+        class_name = classes[int(label)]
 
         print(
-            f"  {str(label):8s}: "
-            f"{count}"
+            f"  {class_name:8s}: {count}"
         )
 
     minimum_count = int(
@@ -295,10 +283,8 @@ def validate_data(
 
     if minimum_count < 2:
         raise ValueError(
-            "At least one class has "
-            "fewer than 2 samples. "
-            "Stratified train/test "
-            "splitting is not possible."
+            "At least one class has fewer than 2 samples. "
+            "Stratified train/test splitting is not possible."
         )
 
     print()
@@ -425,9 +411,16 @@ def evaluate_model(
     print("MODEL EVALUATION")
     print("=" * 60)
 
-    predictions = model.predict(
-        X_test
+    # Model predicts integer class IDs.
+    predictions = np.asarray(
+        model.predict(X_test)
     )
+
+    y_test = np.asarray(y_test)
+
+    # --------------------------------------------------------
+    # Accuracy
+    # --------------------------------------------------------
 
     accuracy = accuracy_score(
         y_test,
@@ -440,6 +433,28 @@ def evaluate_model(
         f"{accuracy * 100:.2f}%"
     )
 
+    # --------------------------------------------------------
+    # Convert IDs to names for reporting
+    # --------------------------------------------------------
+
+    y_test_names = np.asarray(
+        [
+            classes[int(label)]
+            for label in y_test
+        ]
+    )
+
+    prediction_names = np.asarray(
+        [
+            classes[int(label)]
+            for label in predictions
+        ]
+    )
+
+    # --------------------------------------------------------
+    # Classification report
+    # --------------------------------------------------------
+
     print()
     print(
         "Classification report:"
@@ -447,23 +462,28 @@ def evaluate_model(
     print()
 
     report = classification_report(
-        y_test,
-        predictions,
+        y_test_names,
+        prediction_names,
         labels=classes,
         zero_division=0,
     )
 
     print(report)
 
+    # --------------------------------------------------------
+    # Confusion matrix
+    # --------------------------------------------------------
+
     matrix = confusion_matrix(
-        y_test,
-        predictions,
+        y_test_names,
+        prediction_names,
         labels=classes,
     )
 
     print(
         "Confusion matrix shape:"
     )
+
     print(matrix.shape)
 
     return (
@@ -515,7 +535,6 @@ def save_model(
     }
 
     if label_encoder is not None:
-
         package[
             "label_encoder_classes"
         ] = label_encoder.tolist()
@@ -693,10 +712,8 @@ def main():
     # LOAD DATA
     # --------------------------------------------------------
 
-    X, y, classes, version = (
-        load_data(
-            Path(args.data)
-        )
+    X, y, classes, version = load_data(
+        Path(args.data)
     )
 
     # --------------------------------------------------------
@@ -761,29 +778,12 @@ def main():
         # XGBoost requires consecutive
         # integer class labels.
 
-        label_encoder = np.asarray(
-            classes
-        )
-
-        class_to_index = {
-            class_name: index
-            for index, class_name
-            in enumerate(classes)
-        }
+        # V6 already stores integer IDs.
+        # We nevertheless validate the mapping
+        # explicitly through the class list.
 
         y_train_xgb = np.asarray(
-            [
-                class_to_index[label]
-                for label in y_train
-            ],
-            dtype=np.int32,
-        )
-
-        y_test_xgb = np.asarray(
-            [
-                class_to_index[label]
-                for label in y_test
-            ],
+            y_train,
             dtype=np.int32,
         )
 
@@ -793,20 +793,26 @@ def main():
             len(classes),
         )
 
-        encoded_predictions = (
+        encoded_predictions = np.asarray(
             model.predict(X_test)
         )
 
         predictions = np.asarray(
             [
                 classes[int(index)]
-                for index
-                in encoded_predictions
+                for index in encoded_predictions
+            ]
+        )
+
+        y_test_names = np.asarray(
+            [
+                classes[int(label)]
+                for label in y_test
             ]
         )
 
         accuracy = accuracy_score(
-            y_test,
+            y_test_names,
             predictions,
         )
 
@@ -828,7 +834,7 @@ def main():
         print()
 
         report = classification_report(
-            y_test,
+            y_test_names,
             predictions,
             labels=classes,
             zero_division=0,
@@ -837,7 +843,7 @@ def main():
         print(report)
 
         matrix = confusion_matrix(
-            y_test,
+            y_test_names,
             predictions,
             labels=classes,
         )
@@ -845,6 +851,7 @@ def main():
         print(
             "Confusion matrix shape:"
         )
+
         print(matrix.shape)
 
         xgb_evaluation_done = True
@@ -857,7 +864,7 @@ def main():
         )
 
     # --------------------------------------------------------
-    # EVALUATE
+    # EVALUATE RANDOM FOREST
     # --------------------------------------------------------
 
     if not (

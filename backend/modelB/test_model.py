@@ -4,7 +4,7 @@ import torch
 from .model import ModelB
 
 
-CONFIG_PATH = "src/models/modelB/configs/WLASL-100.yaml"
+CONFIG_PATH = "backend/modelB/configs/WLASL-100.yaml"
 
 
 def main():
