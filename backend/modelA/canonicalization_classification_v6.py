@@ -3,11 +3,11 @@ import joblib
 from pathlib import Path
 
 MODEL_PATH = Path(
-    "backend/artifacts/modelA/modelA_rf_v6.pkl"
+    "backend/modelA/artifacts/modelA_rf_v6.pkl"
 )
 
 DATA_PATH = Path(
-    "backend/data/modelA/modelA_v6_full.npz"
+    "backend/modelA/data/modelA_v6_full.npz"
 )
 
 # =========================================================
@@ -352,3 +352,4 @@ print("IMPORTANT:")
 print("V6 classifier was NOT retrained.")
 print("V6 artifact was NOT modified.")
 print("This is only a compatibility experiment.")
+

@@ -2,7 +2,7 @@
 from pathlib import Path
 
 DATA_PATH = Path(
-    "backend/data/modelA/modelA_v6_full.npz"
+    "backend/modelA/data/modelA_v6_full.npz"
 )
 
 data = np.load(
@@ -153,3 +153,4 @@ for class_id, class_name in enumerate(classes):
 
 print()
 print("AUDIT COMPLETE")
+

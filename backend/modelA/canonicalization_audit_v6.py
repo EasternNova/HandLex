@@ -2,7 +2,7 @@
 from pathlib import Path
 
 DATA_PATH = Path(
-    "backend/data/modelA/modelA_v6_full.npz"
+    "backend/modelA/data/modelA_v6_full.npz"
 )
 
 data = np.load(
@@ -340,3 +340,4 @@ print("IMPORTANT:")
 print("This experiment does NOT modify ModelA V6.")
 print("No classifier was retrained.")
 print("No artifact was changed.")
+

@@ -7,11 +7,11 @@ from sklearn.model_selection import train_test_split
 
 
 MODEL_PATH = Path(
-    "backend/artifacts/modelA/modelA_rf_v7.pkl"
+    "backend/modelA/artifacts/modelA_rf_v7.pkl"
 )
 
 DATA_PATH = Path(
-    "backend/data/modelA/modelA_v7_canonical.npz"
+    "backend/modelA/data/modelA_v7_canonical.npz"
 )
 
 
@@ -160,3 +160,4 @@ for class_id, class_name in enumerate(classes):
 
 print()
 print("AUDIT COMPLETE")
+

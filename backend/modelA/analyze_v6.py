@@ -1,11 +1,11 @@
-import joblib
+﻿import joblib
 import numpy as np
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-MODEL_PATH = Path("backend/artifacts/modelA/modelA_rf_v6.pkl")
-DATA_PATH = Path("backend/data/modelA/modelA_v6_full.npz")
+MODEL_PATH = Path("backend/modelA/artifacts/modelA_rf_v6.pkl")
+DATA_PATH = Path("backend/modelA/data/modelA_v6_full.npz")
 
 artifact = joblib.load(MODEL_PATH)
 data = np.load(DATA_PATH, allow_pickle=True)
@@ -91,3 +91,4 @@ for class_name in classes:
 
 print()
 print("ANALYSIS COMPLETE")
+

@@ -21,16 +21,14 @@ MODEL_A_DIR = Path(__file__).resolve().parent
 BACKEND_ROOT = MODEL_A_DIR.parent
 
 DATA_PATH = (
-    BACKEND_ROOT
+    MODEL_A_DIR
     / "data"
-    / "modelA"
     / "modelA_v7_canonical.npz"
 )
 
 ARTIFACT_DIR = (
-    BACKEND_ROOT
+    MODEL_A_DIR
     / "artifacts"
-    / "modelA"
 )
 
 MODEL_PATH = (
@@ -316,7 +314,7 @@ metadata = {
         for c in classes
     ],
     "dataset": (
-        "backend/data/modelA/"
+        "backend/modelA/data/"
         "modelA_v7_canonical.npz"
     ),
     "train_samples": int(len(X_train)),
@@ -384,3 +382,4 @@ print(
 
 print()
 print("V6 artifact was NOT modified.")
+

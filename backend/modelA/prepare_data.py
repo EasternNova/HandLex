@@ -41,11 +41,7 @@ DEFAULT_MODEL = (
 )
 
 
-DEFAULT_OUTPUT_DIR = (
-    BACKEND_ROOT
-    / "data"
-    / "modelA"
-)
+DEFAULT_OUTPUT_DIR = BACKEND_ROOT / "data"
 
 
 # ============================================================

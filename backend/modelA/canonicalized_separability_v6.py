@@ -5,7 +5,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.metrics import silhouette_score
 
 DATA_PATH = Path(
-    "backend/data/modelA/modelA_v6_full.npz"
+    "backend/modelA/data/modelA_v6_full.npz"
 )
 
 data = np.load(
@@ -483,3 +483,4 @@ print("No classifier was trained.")
 print("V6 was not modified.")
 print("This measures whether canonicalized geometry")
 print("contains useful class-separating information.")
+

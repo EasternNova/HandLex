@@ -39,11 +39,7 @@ import numpy as np
 MODEL_A_DIR = Path(__file__).resolve().parent
 BACKEND_ROOT = MODEL_A_DIR.parent
 
-DATA_DIR = (
-    BACKEND_ROOT
-    / "data"
-    / "modelA"
-)
+DATA_DIR = MODEL_A_DIR / "data"
 
 INPUT_DATASET = (
     DATA_DIR
@@ -683,12 +679,12 @@ metadata = {
     "feature_count": EXPECTED_FEATURES,
 
     "source_dataset": (
-        "backend/data/modelA/"
+        "backend/modelA/data/"
         "modelA_v6_full.npz"
     ),
 
     "output_dataset": (
-        "backend/data/modelA/"
+        "backend/modelA/data/"
         "modelA_v7_canonical.npz"
     ),
 
@@ -793,3 +789,4 @@ print("No MediaPipe extraction was performed.")
 print("No classifier was trained.")
 print("No train/test split was performed.")
 print("V7 is now ready for independent validation.")
+

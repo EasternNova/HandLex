@@ -30,7 +30,7 @@ from features import make_feature_vector
 # PATHS
 # ============================================================
 MODEL_A_DIR = Path(__file__).resolve().parent
-BACKEND_ROOT = MODEL_A_DIR.parents[2]
+BACKEND_ROOT = MODEL_A_DIR.parent
 PROJECT_ROOT = BACKEND_ROOT.parent
 
 
@@ -46,6 +46,7 @@ DEFAULT_DATASET = (
 DEFAULT_MODEL = (
     BACKEND_ROOT
     / "models"
+    / "pretrained"
     / "hand_landmarker.task"
 )
 
@@ -59,7 +60,7 @@ DEFAULT_OUTPUT = (
 
 DEFAULT_CHECKPOINT_DIR = (
     MODEL_A_DIR
-    / "data"
+    / "checkpoints"
     / "v6_checkpoints"
 )
 

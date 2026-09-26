@@ -2,11 +2,11 @@
 from pathlib import Path
 
 V6_PATH = Path(
-    "backend/data/modelA/modelA_v6_full.npz"
+    "backend/modelA/data/modelA_v6_full.npz"
 )
 
 V7_PATH = Path(
-    "backend/data/modelA/modelA_v7_canonical.npz"
+    "backend/modelA/data/modelA_v7_canonical.npz"
 )
 
 v6 = np.load(
@@ -313,3 +313,4 @@ print("Geometry is preserved under transformation.")
 print("The coordinate representation has changed.")
 print()
 print("V7 IS READY FOR TRAINING.")
+
