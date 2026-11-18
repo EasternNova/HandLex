@@ -25,6 +25,8 @@ models/pretrained/
 *.pkl
 *.pickle
 
+
+
 # Python / ML generated files
 *.joblib
 *.h5
@@ -47,3 +49,7 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+
+#Ideas folder
+Idea/
+Idea/ss/ #Screenshots
