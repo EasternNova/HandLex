@@ -2,7 +2,8 @@
 import numpy as np
 from pathlib import Path
 
-MODEL_PATH = Path("backend/modelA/artifacts/modelA_rf_v6.pkl")
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
 
 artifact = joblib.load(MODEL_PATH)
 model = artifact["model"]

@@ -6,21 +6,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 
-MODEL_A_DIR = Path(__file__).resolve().parent
-BACKEND_ROOT = MODEL_A_DIR.parent
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
 
-DATA_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "modelA_v6_full.npz"
-)
-
-MODEL_PATH = (
-    BACKEND_ROOT
-    / "artifacts"
-    / "modelA"
-    / "modelA_rf_v6.pkl"
-)
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
 
 
 print("=" * 70)

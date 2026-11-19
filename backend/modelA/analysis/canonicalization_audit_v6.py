@@ -1,9 +1,8 @@
 ﻿import numpy as np
 from pathlib import Path
 
-DATA_PATH = Path(
-    "backend/modelA/data/modelA_v6_full.npz"
-)
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
 
 data = np.load(
     DATA_PATH,

@@ -2,13 +2,10 @@
 import joblib
 from pathlib import Path
 
-MODEL_PATH = Path(
-    "backend/modelA/artifacts/modelA_rf_v6.pkl"
-)
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
 
-DATA_PATH = Path(
-    "backend/modelA/data/modelA_v6_full.npz"
-)
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
 
 # =========================================================
 # LOAD

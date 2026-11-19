@@ -1,10 +1,21 @@
-﻿import joblib
+﻿
+import joblib
 import numpy as np
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-MODEL_PATH = Path("backend/modelA/artifacts/modelA_rf_v6.pkl")
-DATA_PATH = Path("backend/modelA/data/modelA_v6_full.npz")
+
+# Resolve paths relative to Model A
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
+
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
+
+if not MODEL_PATH.exists():
+    raise FileNotFoundError(f"V6 model not found: {MODEL_PATH}")
+
+if not DATA_PATH.exists():
+    raise FileNotFoundError(f"V6 dataset not found: {DATA_PATH}")
 
 artifact = joblib.load(MODEL_PATH)
 data = np.load(DATA_PATH, allow_pickle=True)
@@ -12,9 +23,11 @@ data = np.load(DATA_PATH, allow_pickle=True)
 X = data["X"]
 y = data["y"]
 paths = data["paths"]
+
 classes = artifact["classes"]
 model = artifact["model"]
 
+# Recreate the exact V6 80/20 stratified split
 _, X_test, _, y_test, _, paths_test = train_test_split(
     X,
     y,
@@ -49,4 +62,3 @@ for actual_id, predicted_id in [(13, 12), (12, 13)]:
 
 print()
 print("ANALYSIS COMPLETE")
-

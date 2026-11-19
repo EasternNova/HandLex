@@ -12,12 +12,23 @@ M_ERRORS = [
     "M2306.jpg", "M2149.jpg", "M1901.jpg", "M737.jpg", "M1106.jpg",
     "M1346.jpg", "M1488.jpg", "M1109.jpg", "M1206.jpg"
 ]
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = MODEL_A_DIR.parents[1]
 
-BASE = Path(
-    "dataset/ASL/asl_alphabet_train/asl_alphabet_train"
+BASE = (
+    PROJECT_ROOT
+    / "dataset"
+    / "ASL"
+    / "asl_alphabet_train"
+    / "asl_alphabet_train"
 )
 
-OUTPUT = Path("backend/modelA/nm_error_images.jpg")
+OUTPUT = (
+    MODEL_A_DIR
+    / "analysis"
+    / "reports"
+    / "nm_error_images.jpg"
+)
 
 THUMB_W = 180
 THUMB_H = 180
@@ -61,6 +72,7 @@ for index, (label, path) in enumerate(items):
         fill="black"
     )
 
+OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 sheet.save(OUTPUT, quality=95)
 
 print()

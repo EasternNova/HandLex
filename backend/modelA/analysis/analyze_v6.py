@@ -4,9 +4,15 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-MODEL_PATH = Path("backend/modelA/artifacts/modelA_rf_v6.pkl")
-DATA_PATH = Path("backend/modelA/data/modelA_v6_full.npz")
 
+# Resolve paths relative to the modelA directory
+MODEL_A_DIR = Path(__file__).resolve().parent.parent
+
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
+
+
+# Load trained model and dataset
 artifact = joblib.load(MODEL_PATH)
 data = np.load(DATA_PATH, allow_pickle=True)
 
@@ -15,6 +21,7 @@ y = data["y"]
 
 classes = artifact["classes"]
 model = artifact["model"]
+
 
 # Recreate the exact V6 80/20 stratified split
 X_train, X_test, y_train, y_test = train_test_split(
@@ -33,13 +40,15 @@ cm = confusion_matrix(
     labels=np.arange(len(classes)),
 )
 
+accuracy = accuracy_score(y_test, predictions)
+
 print()
 print("MODEL A V6 REAL TEST CONFUSION ANALYSIS")
 print("=" * 80)
 print(f"Total dataset samples : {len(y)}")
 print(f"Test samples          : {len(y_test)}")
-print(f"Accuracy              : {accuracy_score(y_test, predictions):.6f}")
-print(f"Accuracy (%)          : {accuracy_score(y_test, predictions) * 100:.2f}%")
+print(f"Accuracy              : {accuracy:.6f}")
+print(f"Accuracy (%)          : {accuracy * 100:.2f}%")
 
 print()
 print("MOST COMMON CONFUSIONS")
@@ -74,7 +83,7 @@ report = classification_report(
     y_test,
     predictions,
     labels=np.arange(len(classes)),
-    target_names=classes,
+    target_names=[str(name) for name in classes],
     zero_division=0,
     output_dict=True,
 )
@@ -91,4 +100,3 @@ for class_name in classes:
 
 print()
 print("ANALYSIS COMPLETE")
-

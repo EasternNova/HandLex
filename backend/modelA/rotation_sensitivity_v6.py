@@ -2,30 +2,25 @@
 import joblib
 from pathlib import Path
 
-# =========================================================
+
 # PATHS
-# =========================================================
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
 
-MODEL_PATH = Path(
-    "backend/modelA/artifacts/modelA_rf_v6.pkl"
-)
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
 
-DATA_PATH = Path(
-    "backend/modelA/data/modelA_v6_full.npz"
-)
 
-# =========================================================
 # LOAD MODEL
-# =========================================================
+
 
 package = joblib.load(MODEL_PATH)
 
 model = package["model"]
 classes = np.asarray(package["classes"])
 
-# =========================================================
+
 # LOAD DATA
-# =========================================================
+
 
 data = np.load(
     DATA_PATH,
@@ -43,7 +38,7 @@ print(f"Dataset samples : {len(X)}")
 print(f"Feature count   : {X.shape[1]}")
 print(f"Classes         : {len(classes)}")
 
-# =========================================================
+
 # USE ONLY SAMPLES WITH A DETECTED HAND
 #
 # V3 has:
@@ -55,7 +50,7 @@ print(f"Classes         : {len(classes)}")
 #
 # We rotate the 3D landmarks and rebuild the geometric
 # features while keeping the original model unchanged.
-# =========================================================
+
 
 landmarks = X[:, :63].reshape(-1, 21, 3)
 
@@ -68,10 +63,10 @@ y_valid = y[valid]
 
 print(f"Hand-present samples: {len(landmarks)}")
 
-# =========================================================
+
 # ANGLE DEFINITIONS
 # Same 10 angle definitions used by ModelA V3.
-# =========================================================
+
 
 angle_triplets = [
     (0, 1, 2),
@@ -89,9 +84,9 @@ angle_triplets = [
     (0, 13, 14),
 ]
 
-# =========================================================
+
 # REBUILD V3 GEOMETRIC FEATURES
-# =========================================================
+
 
 def angle(a, b, c):
 
@@ -180,9 +175,9 @@ def build_features(batch):
     return geometric_features
 
 
-# =========================================================
+
 # ROTATION
-# =========================================================
+
 
 def rotation_matrix(
     axis,
@@ -251,9 +246,9 @@ def rotate_landmarks(
     return rotated
 
 
-# =========================================================
+
 # BASELINE
-# =========================================================
+
 
 # Reconstruct valid original V3 features.
 #
@@ -279,9 +274,9 @@ print(
     f"{baseline_accuracy * 100:.4f}%"
 )
 
-# =========================================================
+
 # TEST ROTATIONS
-# =========================================================
+
 
 angles_to_test = [
     15,

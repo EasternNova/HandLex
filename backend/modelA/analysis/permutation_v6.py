@@ -4,8 +4,10 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-MODEL_PATH = Path("backend/modelA/artifacts/modelA_rf_v6.pkl")
-DATA_PATH = Path("backend/modelA/data/modelA_v6_full.npz")
+MODEL_A_DIR = Path(__file__).resolve().parents[1]
+
+MODEL_PATH = MODEL_A_DIR / "artifacts" / "modelA_rf_v6.pkl"
+DATA_PATH = MODEL_A_DIR / "data" / "modelA_v6_full.npz"
 
 artifact = joblib.load(MODEL_PATH)
 data = np.load(DATA_PATH, allow_pickle=True)
@@ -94,7 +96,7 @@ print()
 print("RANKED BY ACCURACY DROP")
 print("-" * 80)
 
-results.sort(reverse=True)
+results.sort(key=lambda item: item[0], reverse=True)
 
 for rank, (drop, name, accuracy) in enumerate(results, 1):
 
