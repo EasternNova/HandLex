@@ -1,28 +1,32 @@
-# HandLex backend — dependencies found in the uploaded backend source
-# Install from the backend directory:
-#   python -m pip install -r requirements.txt
-#
-# These are the direct third-party imports used by the current Model A scripts.
-# Keep the Python version aligned with wheel support for MediaPipe and OpenCV.
+# HandLex backend requirements
+# Install from the project root or backend directory using the appropriate Python environment.
+# Package availability and wheel support should be verified for the selected Python version.
 
-# Model A: hand landmark extraction
+# Hand-landmark detection
 mediapipe
 
-# Image/video capture and image loading
+# Image / video decoding and capture
 opencv-python
 Pillow
 
-# Feature arrays and model training/inference
+# Feature processing and Model A
 numpy
 scikit-learn
 joblib
+
+# API server and multipart image uploads
+fastapi
+uvicorn
+python-multipart
+
+# Included in the existing experiments/artifact ecosystem
 xgboost
 
 # Model B note:
-# The uploaded backend contains archived .pt checkpoints and .ini config files,
-# but no Model B Python implementation/imports. Add the PyTorch/I3D dependencies
-# when the Model B runtime and its expected preprocessing are integrated.
+# Model B currently contains archived checkpoints/configuration files rather than an
+# integrated runtime. Add and pin PyTorch and its related dependencies only when
+# Model B's implementation and preprocessing are brought into the active code.
 #
-# API note:
-# No FastAPI/Flask server implementation was present in the uploaded backend.
-# Add FastAPI + Uvicorn only when we create the backend API.
+# Model C note:
+# Model C is not currently documented as an integrated runtime. Add dependencies
+# when its implementation is defined.

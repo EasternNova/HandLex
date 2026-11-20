@@ -1,195 +1,91 @@
-﻿# HandLex Model A
-
-## Purpose
-Model A is the static hand-sign recognition model used within the HandLex translator.
-
-## Core Components
-
-| File | Responsibility |
-|---|---|
-| `features.py` | Feature extraction |
-| `landmarker.py` | Hand landmark detection |
-| `model.py` | Model-related definitions |
-| `webcam.py` | Live inference and webcam testing |
-| `test_hand_landmarker.py` | Hand detector testing |
-
-## Training & Data
-
-| File | Responsibility |
-|---|---|
-| `prepare_data_v6.py` | Dataset preparation |
-| `train.py` | Model training |
-
-## Analysis
-All model evaluation, diagnostics, experimental analysis, and reports are stored in `analysis/`.
-
-## Model Artifacts
-The trained V6 model is stored in `artifacts/`.
-
-## Dataset
-The dataset and testing data are stored in `data/`.
-
-## Checkpoints
-Training checkpoints are stored in `checkpoints/`.
-
-## Archive
-Historical code, models, datasets and experiments are preserved in `archive/`.
-
-## Current Production Candidate
-Model A V6 — Random Forest classifier, 95 features, 29 classes.
-
-## Important
-- Do not modify the V6 production artifact during organization.
-- Do not modify the original dataset or archived files.
-- Experimental canonicalization is not used in production inference.
-- Model A will eventually integrate into the unified HandLex Translator alongside other models.
-
 # Model A — HandLex
 
-## Current Development Status
+## Overview
 
-### Completed: Model A V6 Inference Engine
+Model A is HandLex's currently integrated hand-sign classifier. Its active inference pipeline uses MediaPipe to detect hand landmarks, extracts a 95-feature representation, and passes the features to a saved Random Forest model.
 
-The original Model A V6 classifier has been successfully connected to a reusable inference engine.
-
-**Verified accomplishments:**
-
-- Loaded the existing trained Random Forest classifier.
-- Loaded the MediaPipe HandLandmarker asset.
-- Initialized the inference engine successfully.
-- Verified V3 feature configuration (95 features).
-- Successfully detected a hand in a test image.
-- Extracted the 95-feature input vector.
-- Successfully generated a prediction using `predict_proba()`.
-- Generated Top-3 predictions.
-- Returned structured inference results.
-- Verified the engine cleanup operation.
-
-### Model A V6 Configuration
+## Current model
 
 | Property | Value |
 |---|---|
-| Model | Model A V6 |
 | Classifier | Random Forest |
-| Feature version | V3 |
+| Artifact | `artifacts/modelA_rf_v6.pkl` |
+| Feature version | 3 |
 | Feature count | 95 |
 | Classes | 29 |
-| Model artifact | `artifacts/modelA_rf_v6.pkl` |
-| Hand detection | MediaPipe HandLandmarker |
-| HandLandmarker asset | `backend/models/pretrained/hand_landmarker.task` |
+| Recorded test accuracy | 98.8287% |
+| Test samples | 13,318 |
+| Split | Stratified 80/20; random state 42 |
 
-### First Successful Inference Test
+The benchmark is a recorded evaluation result and should not be interpreted as webcam accuracy.
 
-**Test image:**
+## Classes
 
-`backend/modelA/test_images/test_hand.jpg`
+A–Z plus `del`, `nothing`, and `space` (29 total).
 
-**Result:**
+## Features
 
-- Hand detected: Yes
-- Handedness: Right
-- Prediction: `10`
-- Confidence: `1.0`
-- Top-3 predictions: `10`, `27`, `26`
+The feature vector includes:
 
-The first successful image inference confirms that the classifier, landmark detection, feature extraction and prediction pipeline are operational.
+- 63 normalized XYZ landmark values
+- 10 joint-angle values
+- 20 wrist-distance values
+- Hand-present flag
+- Handedness information
 
-This is an initial functional test, not a complete accuracy or performance validation.
+## Inference flow
 
----
+```text
+Image frame
+  ↓
+MediaPipe HandLandmarker
+  ↓
+Landmarks
+  ↓
+Feature extraction (version 3, 95 values)
+  ↓
+Saved Random Forest
+  ↓
+Prediction and confidence
+  ↓
+Temporal prediction stabilizer
+```
 
-## C. Prepare Model A for the Backend
+## Live integration
 
-- Create a Python API, likely using FastAPI.
-- Create prediction endpoints.
-- Define how camera frames and data are received.
-- Define structured prediction responses.
-- Handle errors and model loading safely.
+Model A is called through the FastAPI service. The API loads the model once in memory and uses the image endpoint for uploaded camera frames.
 
-## D. Connect the Frontend
+Relevant files include:
 
-- Build the Model A translator page.
-- Connect the frontend camera.
-- Send frames or landmarks to the backend.
-- Display live predictions and confidence.
-- Display translated text.
-- Implement clear, space and delete.
-- Implement camera start/stop.
+- `inference.py` — inference wrapper
+- `features.py` — feature extraction
+- `landmarker.py` — landmark detection
+- `prediction_stabilizer.py` — temporal stabilization
+- `artifacts/` — saved model artifacts and metadata
+- `data/` — prepared datasets and test files
+- `checkpoints/` — preserved processing checkpoints
 
-## E. Final Testing
+## Run the API
 
-- Test isolated predictions.
-- Test webcam performance.
-- Test incorrect predictions.
-- Test no-hand scenarios.
-- Test frontend/backend communication.
-- Test the complete translator workflow.
+From the HandLex root:
 
----
+```powershell
+py -3.15 -m uvicorn backend.api.main:app --reload
+```
 
-## 5. Our Working Order From Now On
+Then in Swagger (`http://127.0.0.1:8000/docs`):
 
-We will follow this order rather than randomly editing files.
+1. Execute `POST /models/model-a/load`.
+2. Use `POST /models/model-a/predict-image` to upload an image.
 
-### STEP 1 — Cleanup & Audit
-Remove duplicates, establish proper naming and verify existing code.
+The frontend Translate page sends camera frames to this endpoint after Model A is loaded.
 
-**Status: Completed**
+## Testing notes and limitations
 
-### STEP 2 — Organize Model A
-Create the proper folder structure and relocate existing files.
+Initial webcam tests have produced predictions (including some letters such as B and C), but recognition is inconsistent across signs. Lighting, hand position, camera angle, landmark detection, and differences between training and real-world images may affect results.
 
-**Status: Completed**
+Separate external-image tests and benchmark results should not be conflated with live-webcam performance.
 
-### STEP 3 — Build Inference Engine
-Separate model loading, features, prediction and smoothing.
+## Preservation
 
-**Status: Initial inference engine implemented and initialized.**
-
-### STEP 4 — Test Inference
-Ensure the cleaned code still correctly uses V6.
-
-**Status: Initial image inference passed. Further validation is pending.**
-
-### STEP 5 — Build Backend API
-Expose Model A functionality to the website.
-
-**Status: Pending**
-
-### STEP 6 — Connect Frontend
-Connect webcam, prediction, confidence and text output.
-
-**Status: Pending**
-
-### STEP 7 — Final Integration
-Test HandLex Model A from the website, end to end.
-
-**Status: Pending**
-
----
-
-## Immediate Next Task
-
-### STEP 3 — Inference Validation and Label Mapping
-
-Before building the backend API, validate the inference engine and verify the mapping between numeric class IDs and actual sign labels.
-
-Planned work:
-
-1. Verify the class-label mapping.
-2. Test multiple sign images.
-3. Check prediction consistency.
-4. Validate feature extraction.
-5. Identify incorrect predictions.
-6. Confirm no-hand behavior.
-7. Prepare the engine for continuous frame inference and temporal smoothing.
-
-**Next milestone:** A validated and reliable Model A inference engine ready to be exposed through the backend API.
-
----
-
-## Development Principle
-
-Preserve the original Model A V6 training artifacts.
-
-All inference, validation and backend work must use the existing trained model without unnecessarily retraining, overwriting or modifying the original training data, checkpoints or classifier artifacts.
+Do not retrain, replace, or overwrite the protected V6 model, datasets, checkpoints, or evaluation records without backups and a deliberate evaluation plan.
