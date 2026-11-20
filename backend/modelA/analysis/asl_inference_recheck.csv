@@ -1,0 +1,29 @@
+image,expected,predicted,confidence,hand_detected,handedness,correct,top3
+A_test.jpg,A,nothing,1.0,False,,False,[]
+B_test.jpg,B,B,1.0,True,Right,True,"[{'sign': 'B', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+C_test.jpg,C,nothing,1.0,False,,False,[]
+D_test.jpg,D,nothing,1.0,False,,False,[]
+E_test.jpg,E,nothing,1.0,False,,False,[]
+F_test.jpg,F,F,1.0,True,Right,True,"[{'sign': 'F', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+G_test.jpg,G,G,1.0,True,Right,True,"[{'sign': 'G', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+H_test.jpg,H,nothing,1.0,False,,False,[]
+I_test.jpg,I,I,1.0,True,Right,True,"[{'sign': 'I', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+J_test.jpg,J,J,1.0,True,Right,True,"[{'sign': 'J', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+K_test.jpg,K,K,1.0,True,Right,True,"[{'sign': 'K', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+L_test.jpg,L,L,1.0,True,Right,True,"[{'sign': 'L', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+M_test.jpg,M,nothing,1.0,False,,False,[]
+N_test.jpg,N,nothing,1.0,False,,False,[]
+nothing_test.jpg,nothing,nothing,1.0,False,,True,[]
+O_test.jpg,O,nothing,1.0,False,,False,[]
+P_test.jpg,P,P,1.0,True,Right,True,"[{'sign': 'P', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+Q_test.jpg,Q,Q,0.9766666666666667,True,Right,True,"[{'sign': 'Q', 'confidence': 0.9766666666666667}, {'sign': 'P', 'confidence': 0.02}, {'sign': 'del', 'confidence': 0.0033333333333333335}]"
+R_test.jpg,R,nothing,1.0,False,,False,[]
+S_test.jpg,S,S,1.0,True,Right,True,"[{'sign': 'S', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+space_test.jpg,space,space,0.9033333333333333,True,Left,True,"[{'sign': 'space', 'confidence': 0.9033333333333333}, {'sign': 'G', 'confidence': 0.013333333333333334}, {'sign': 'F', 'confidence': 0.013333333333333334}]"
+T_test.jpg,T,T,1.0,True,Right,True,"[{'sign': 'T', 'confidence': 1.0}, {'sign': 'nothing', 'confidence': 0.0}, {'sign': 'del', 'confidence': 0.0}]"
+U_test.jpg,U,nothing,1.0,False,,False,[]
+V_test.jpg,V,nothing,1.0,False,,False,[]
+W_test.jpg,W,W,0.93,True,Right,True,"[{'sign': 'W', 'confidence': 0.93}, {'sign': 'M', 'confidence': 0.016666666666666666}, {'sign': 'B', 'confidence': 0.013333333333333334}]"
+X_test.jpg,X,nothing,1.0,False,,False,[]
+Y_test.jpg,Y,Y,1.0,True,Right,True,"[{'sign': 'Y', 'confidence': 1.0}, {'sign': 'space', 'confidence': 0.0}, {'sign': 'nothing', 'confidence': 0.0}]"
+Z_test.jpg,Z,nothing,1.0,False,,False,[]

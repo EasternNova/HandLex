@@ -1,0 +1,15 @@
+image,expected,direct_file,opencv_rgb,opencv_rgb_2x
+A_test.jpg,A,False,False,False
+C_test.jpg,C,False,False,False
+D_test.jpg,D,False,False,False
+E_test.jpg,E,False,False,False
+H_test.jpg,H,False,False,True
+M_test.jpg,M,False,False,False
+N_test.jpg,N,False,False,False
+nothing_test.jpg,nothing,False,False,False
+O_test.jpg,O,True,False,True
+R_test.jpg,R,False,False,False
+U_test.jpg,U,False,False,False
+V_test.jpg,V,False,False,False
+X_test.jpg,X,False,False,False
+Z_test.jpg,Z,False,False,False
