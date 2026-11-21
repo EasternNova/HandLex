@@ -1,6 +1,4 @@
-/* =========================
-   TRANSLATE PAGE
-========================= */
+/*TRANSLATE PAGE*/
 
 .translate-page {
   min-height: 100vh;
@@ -183,9 +181,7 @@
   line-height: 1.6;
 }
 
-/* =========================
-   TRANSLATE RESPONSIVE
-========================= */
+/*TRANSLATE RESPONSIVE*/
 
 @media (max-width: 900px) {
   .translator-container {
@@ -212,9 +208,7 @@
   }
 }
 
-/* =========================
-   CAMERA VIDEO
-========================= */
+/*CAMERA VIDEO*/
 
 .camera-video {
   display: none;

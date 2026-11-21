@@ -1,6 +1,4 @@
-/* =========================
-   GLOBAL VARIABLES
-========================= */
+/*GLOBAL VARIABLES*/
 
 :root {
   --orange: #f28c28;
@@ -11,9 +9,7 @@
 }
 
 
-/* =========================
-   GLOBAL RESET
-========================= */
+/*GLOBAL RESET*/
 
 * {
   box-sizing: border-box;
@@ -44,9 +40,7 @@ button {
 }
 
 
-/* =========================
-   NAVBAR
-========================= */
+/*NAVBAR*/
 
 .navbar {
   width: 100%;
@@ -93,9 +87,7 @@ button {
 }
 
 
-/* =========================
-   SHARED BUTTONS
-========================= */
+/*SHARED BUTTONS*/
 
 .nav-button,
 .primary-button {
@@ -120,9 +112,7 @@ button {
 }
 
 
-/* =========================
-   SHARED TEXT
-========================= */
+/*SHARED TEXT*/
 
 .eyebrow {
   font-size: 12px;
@@ -133,9 +123,7 @@ button {
 }
 
 
-/* =========================
-   SHARED LIVE INDICATOR
-========================= */
+/*SHARED LIVE INDICATOR*/
 
 .live-dot {
   display: inline-block;
@@ -147,9 +135,7 @@ button {
 }
 
 
-/* =========================
-   GLOBAL RESPONSIVE
-========================= */
+/*GLOBAL RESPONSIVE*/
 
 @media (max-width: 900px) {
   .nav-links {

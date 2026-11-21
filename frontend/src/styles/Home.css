@@ -1,6 +1,4 @@
-/* =========================
-   HOME HERO
-========================= */
+/*HOME HERO*/
 
 .hero-section {
   min-height: 680px;
@@ -37,9 +35,7 @@
 }
 
 
-/* =========================
-   HOME CAMERA CARD
-========================= */
+/*HOME CAMERA CARD*/
 
 .hero-visual {
   display: flex;
@@ -110,9 +106,7 @@
 }
 
 
-/* =========================
-   HOW IT WORKS
-========================= */
+/*HOW IT WORKS*/
 
 .how-section {
   padding: 110px 7%;
@@ -137,9 +131,7 @@
 }
 
 
-/* =========================
-   STEPS
-========================= */
+/*STEPS*/
 
 .steps {
   display: grid;
@@ -173,9 +165,7 @@
 }
 
 
-/* =========================
-   FEATURES
-========================= */
+/*FEATURES*/
 
 .features-section {
   padding: 110px 7%;
@@ -232,9 +222,7 @@
 }
 
 
-/* =========================
-   BIGGER VISION
-========================= */
+/*BIGGER VISION*/
 
 .vision-section {
   padding: 130px 7%;
@@ -259,9 +247,7 @@
 }
 
 
-/* =========================
-   FOOTER
-========================= */
+/*FOOTER*/
 
 footer {
   padding: 45px 7%;
@@ -274,9 +260,7 @@ footer {
 }
 
 
-/* =========================
-   HOME RESPONSIVE
-========================= */
+/*HOME RESPONSIVE*/
 
 @media (max-width: 900px) {
   .hero-section,

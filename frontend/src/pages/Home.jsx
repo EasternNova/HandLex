@@ -15,10 +15,6 @@ function Home() {
         <div className="nav-links">
           <Link to="/">Home</Link>
           <Link to="/translate">Translate</Link>
-          <Link to="/learn">Learn</Link>
-          <Link to="/practice">Practice</Link>
-          <Link to="/dictionary">Dictionary</Link>
-          <Link to="/about">About</Link>
         </div>
 
         <Link to="/translate" className="nav-button">
@@ -39,21 +35,16 @@ function Home() {
             </h1>
 
             <p className="hero-description">
-              HandLex uses artificial intelligence to recognize sign language,
-              help you learn, and make communication more accessible.
+              HandLex uses artificial intelligence to recognize sign language
+              and help make communication more accessible.
             </p>
 
-            <div className="hero-buttons">
-              <Link to="/translate" className="primary-button">
-                Start Translating →
-              </Link>
-
-              <Link to="/learn" className="secondary-button">
-                Explore Learning
-              </Link>
-            </div>
+          <div className="hero-buttons">
+            <Link to="/translate" className="primary-button">
+              Start Translating →
+            </Link>
+           </div>
           </div>
-
           <div className="hero-visual">
             <div className="camera-card">
               <div className="camera-header">
@@ -141,78 +132,6 @@ function Home() {
               <p>
                 The recognized sign becomes text you can understand and use.
               </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Features */}
-        <section className="features-section">
-          <div className="section-heading">
-            <p className="eyebrow">THE HANDLEX EXPERIENCE</p>
-
-            <h2>More than recognition.</h2>
-          </div>
-
-          <div className="feature-grid">
-            <div className="feature-card large">
-              <div className="feature-icon">🤟</div>
-
-              <h3>Sign → Text</h3>
-
-              <p>
-                Recognize signs through your camera and convert them into
-                readable text.
-              </p>
-
-              <Link to="/translate">Try recognition →</Link>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">📚</div>
-
-              <h3>Learn</h3>
-
-              <p>
-                Learn the alphabet, words, phrases and everyday signs.
-              </p>
-
-              <Link to="/learn">Start learning →</Link>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">🎯</div>
-
-              <h3>Practice</h3>
-
-              <p>
-                Practice signs and receive instant feedback from the AI.
-              </p>
-
-              <Link to="/practice">Practice now →</Link>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">📖</div>
-
-              <h3>Sign Dictionary</h3>
-
-              <p>
-                Search and explore signs, meanings and demonstrations.
-              </p>
-
-              <Link to="/dictionary">Explore dictionary →</Link>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">🔊</div>
-
-              <h3>Text → Speech</h3>
-
-              <p>
-                Turn recognized text into speech for easier communication.
-              </p>
-
-              <Link to="/translate">Learn more →</Link>
             </div>
           </div>
         </section>
