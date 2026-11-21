@@ -9,9 +9,9 @@ from backend.modelA.landmarker import (
 )
 
 
-# ============================================================
+
 # PATHS
-# ============================================================
+
 
 # This file is located at:
 # G:\EasternNova\HandLex\backend\modelA\test_landmarker.py
@@ -38,9 +38,9 @@ DATASET_ROOT = (
 )
 
 
-# ============================================================
+
 # MAIN TEST
-# ============================================================
+
 
 def main():
 
@@ -48,9 +48,7 @@ def main():
     print("HandLex ModelA - MediaPipe Hand Landmarker Test")
     print("=" * 60)
 
-    # --------------------------------------------------------
     # Print paths
-    # --------------------------------------------------------
 
     print("\nProject root:")
     print(PROJECT_ROOT)
@@ -64,9 +62,7 @@ def main():
     print("\nDataset:")
     print(DATASET_ROOT)
 
-    # --------------------------------------------------------
     # Check MediaPipe model
-    # --------------------------------------------------------
 
     print("\n" + "-" * 60)
     print("1. Checking MediaPipe pretrained model")
@@ -96,9 +92,7 @@ def main():
 
     print("Model size: OK")
 
-    # --------------------------------------------------------
     # Check ASL dataset
-    # --------------------------------------------------------
 
     print("\n" + "-" * 60)
     print("2. Checking ASL dataset")
@@ -135,9 +129,7 @@ def main():
 
     print("Class A folder: OK")
 
-    # --------------------------------------------------------
     # Find an image
-    # --------------------------------------------------------
 
     candidates = []
 
@@ -156,9 +148,7 @@ def main():
     print(f"Test image: {image_path}")
     print("Image: OK")
 
-    # --------------------------------------------------------
     # Create MediaPipe Hand Landmarker
-    # --------------------------------------------------------
 
     print("\n" + "-" * 60)
     print("3. Creating MediaPipe Hand Landmarker")
@@ -177,9 +167,7 @@ def main():
 
     print("Hand Landmarker: OK")
 
-    # --------------------------------------------------------
     # Run hand detection
-    # --------------------------------------------------------
 
     print("\n" + "-" * 60)
     print("4. Running hand detection")
@@ -212,9 +200,7 @@ def main():
             except Exception:
                 pass
 
-    # --------------------------------------------------------
     # Check landmarks
-    # --------------------------------------------------------
 
     print("\n" + "-" * 60)
     print("5. Checking landmarks")
@@ -238,9 +224,7 @@ def main():
     else:
         print("Handedness: unavailable")
 
-    # --------------------------------------------------------
     # Print first 3 landmarks
-    # --------------------------------------------------------
 
     print("\nFirst 3 landmarks:")
 
@@ -252,9 +236,7 @@ def main():
             f"z={point.z:.5f}"
         )
 
-    # --------------------------------------------------------
     # Final result
-    # --------------------------------------------------------
 
     print("\n" + "=" * 60)
 
@@ -275,9 +257,9 @@ def main():
     print("=" * 60)
 
 
-# ============================================================
+
 # ENTRY POINT
-# ============================================================
+
 
 if __name__ == "__main__":
     main()

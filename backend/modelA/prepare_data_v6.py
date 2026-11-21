@@ -11,7 +11,7 @@ from landmarker import create_landmarker, detect_file, get_first_hand
 from features import make_feature_vector
 
 
-# ============================================================
+
 # HandLex ModelA V6
 # Full Dataset Landmark Extraction
 #
@@ -23,12 +23,12 @@ from features import make_feature_vector
 # - Automatically resumes after Ctrl+C / interruption
 # - Final NPZ + JSON metadata are created only after
 #   all classes have been processed
-# ============================================================
 
 
-# ============================================================
+
+
 # PATHS
-# ============================================================
+
 MODEL_A_DIR = Path(__file__).resolve().parent
 BACKEND_ROOT = MODEL_A_DIR.parent
 PROJECT_ROOT = BACKEND_ROOT.parent
@@ -64,9 +64,9 @@ DEFAULT_CHECKPOINT_DIR = (
     / "v6_checkpoints"
 )
 
-# ============================================================
+
 # CONFIGURATION
-# ============================================================
+
 
 # V6 uses the already-developed V3 feature representation.
 FEATURE_VERSION = 3
@@ -92,9 +92,9 @@ IMAGE_EXTENSIONS = {
 }
 
 
-# ============================================================
+
 # DISPLAY
-# ============================================================
+
 
 def print_header():
     print("=" * 70)
@@ -113,9 +113,9 @@ def print_header():
     print()
 
 
-# ============================================================
+
 # DATASET HELPERS
-# ============================================================
+
 
 def find_classes(dataset_root: Path):
     """
@@ -166,9 +166,9 @@ def image_files(class_dir: Path):
     )
 
 
-# ============================================================
+
 # FEATURE HELPERS
-# ============================================================
+
 
 def no_hand_features():
     """
@@ -207,9 +207,9 @@ def validate_features(features):
     return features
 
 
-# ============================================================
+
 # CHECKPOINT HELPERS
-# ============================================================
+
 
 def checkpoint_path(
     checkpoint_dir: Path,
@@ -351,9 +351,9 @@ def list_checkpoints(checkpoint_dir: Path):
     )
 
 
-# ============================================================
+
 # CHECKPOINT SUMMARY
-# ============================================================
+
 
 def print_existing_checkpoints(checkpoint_dir: Path):
     """
@@ -391,9 +391,9 @@ def print_existing_checkpoints(checkpoint_dir: Path):
     print()
 
 
-# ============================================================
+
 # MERGE CHECKPOINTS
-# ============================================================
+
 
 def merge_checkpoints(
     checkpoint_dir: Path,
@@ -503,9 +503,7 @@ def merge_checkpoints(
         failures += metadata["failures"]
         no_hand_samples += metadata["no_hand_samples"]
 
-    # --------------------------------------------------------
     # Final arrays
-    # --------------------------------------------------------
 
     X_array = np.concatenate(
         all_X,
@@ -533,9 +531,7 @@ def merge_checkpoints(
         dtype=str,
     )
 
-    # --------------------------------------------------------
     # Final validation
-    # --------------------------------------------------------
 
     if X_array.shape[0] != y_array.shape[0]:
         raise RuntimeError(
@@ -562,9 +558,7 @@ def merge_checkpoints(
             "Final feature matrix contains NaN or Inf."
         )
 
-    # --------------------------------------------------------
     # Detection rate
-    # --------------------------------------------------------
 
     detection_rate = (
         successful / total_images
@@ -572,9 +566,7 @@ def merge_checkpoints(
         else 0.0
     )
 
-    # --------------------------------------------------------
     # Save final NPZ
-    # --------------------------------------------------------
 
     output_path.parent.mkdir(
         parents=True,
@@ -592,9 +584,7 @@ def merge_checkpoints(
         ),
     )
 
-    # --------------------------------------------------------
     # Save metadata
-    # --------------------------------------------------------
 
     metadata_path = output_path.with_suffix(
         ".json"
@@ -652,9 +642,7 @@ def merge_checkpoints(
             indent=2,
         )
 
-    # --------------------------------------------------------
     # Final report
-    # --------------------------------------------------------
 
     print()
     print("=" * 70)
@@ -696,9 +684,7 @@ def merge_checkpoints(
     )
     print()
 
-    # --------------------------------------------------------
     # Per-class summary
-    # --------------------------------------------------------
 
     print("Per-class summary:")
     print()
@@ -756,9 +742,9 @@ def merge_checkpoints(
     print()
 
 
-# ============================================================
+
 # MAIN EXTRACTION
-# ============================================================
+
 
 def main(
     dataset_root: Path,
@@ -769,18 +755,14 @@ def main(
 ):
     print_header()
 
-    # --------------------------------------------------------
     # Resolve paths
-    # --------------------------------------------------------
 
     dataset_root = dataset_root.resolve()
     model_path = model_path.resolve()
     output_path = output_path.resolve()
     checkpoint_dir = checkpoint_dir.resolve()
 
-    # --------------------------------------------------------
     # Safety: do not overwrite final dataset
-    # --------------------------------------------------------
 
     if output_path.exists():
         raise FileExistsError(
@@ -790,18 +772,14 @@ def main(
             "to rebuild the complete dataset."
         )
 
-    # --------------------------------------------------------
     # Validate dataset
-    # --------------------------------------------------------
 
     if not dataset_root.exists():
         raise FileNotFoundError(
             f"Dataset not found:\n{dataset_root}"
         )
 
-    # --------------------------------------------------------
     # Validate MediaPipe model
-    # --------------------------------------------------------
 
     if not model_path.exists():
         raise FileNotFoundError(
@@ -817,9 +795,7 @@ def main(
             f"Size: {model_size:,} bytes"
         )
 
-    # --------------------------------------------------------
     # Print paths
-    # --------------------------------------------------------
 
     print(
         f"Project root : {PROJECT_ROOT}"
@@ -847,9 +823,7 @@ def main(
 
     print()
 
-    # --------------------------------------------------------
     # Find classes
-    # --------------------------------------------------------
 
     classes = find_classes(
         dataset_root
@@ -862,9 +836,7 @@ def main(
     print(classes)
     print()
 
-    # --------------------------------------------------------
     # Prepare directories
-    # --------------------------------------------------------
 
     output_path.parent.mkdir(
         parents=True,
@@ -876,17 +848,13 @@ def main(
         exist_ok=True,
     )
 
-    # --------------------------------------------------------
     # Show existing checkpoints
-    # --------------------------------------------------------
 
     print_existing_checkpoints(
         checkpoint_dir
     )
 
-    # --------------------------------------------------------
     # Create MediaPipe detector
-    # --------------------------------------------------------
 
     print(
         "Creating MediaPipe Hand Landmarker..."
@@ -904,9 +872,9 @@ def main(
 
     start_time = time.time()
 
-    # ========================================================
+    ================
     # EXTRACTION
-    # ========================================================
+    ================
 
     try:
 
@@ -923,9 +891,9 @@ def main(
                 class_dir
             )
 
-            # ------------------------------------------------
+            
             # Optional smoke-test limit
-            # ------------------------------------------------
+            
 
             if limit_per_class is not None:
                 files = files[
@@ -945,9 +913,9 @@ def main(
 
             print("=" * 70)
 
-            # ------------------------------------------------
+            
             # Process in chunks
-            # ------------------------------------------------
+            
 
             for chunk_start in range(
                 0,
@@ -1181,9 +1149,9 @@ def main(
 
                 print()
 
-            # ------------------------------------------------
+            
             # Class complete
-            # ------------------------------------------------
+            
 
             class_checkpoints = [
                 p
@@ -1268,9 +1236,9 @@ def main(
 
         detector.close()
 
-    # ========================================================
+    ================
     # MERGE EVERYTHING
-    # ========================================================
+    ================
 
     elapsed = (
         time.time()
@@ -1286,9 +1254,9 @@ def main(
     )
 
 
-# ============================================================
+
 # COMMAND LINE INTERFACE
-# ============================================================
+
 
 if __name__ == "__main__":
 

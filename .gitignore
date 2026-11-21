@@ -1,6 +1,10 @@
-MY_IDEAS/
 
-# Python
+# IDEAS
+MY_IDEAS/
+Idea/
+Idea/ss/
+
+# PYTHON
 __pycache__/
 *.py[cod]
 
@@ -9,10 +13,14 @@ __pycache__/
 venv/
 env/
 
-# VS Code
-.vscode/
+# Python / ML generated files
+*.joblib
+*.h5
+*.keras
+*.pkl
+*.pickle
 
-# Data
+# MACHINE LEARNING DATA
 dataset/
 data/
 
@@ -22,34 +30,40 @@ models/pretrained/
 *.pt
 *.pth
 *.onnx
-*.pkl
-*.pickle
 
-
-
-# Python / ML generated files
-*.joblib
-*.h5
-*.keras
-
-# Node / React / Vite
+# NODE / REACT / VITE
 node_modules/
 dist/
+dist-ssr/
 build/
 .vite/
 
-# Environment / Secrets
+# ENVIRONMENT / SECRETS
 .env
 .env.*
 !.env.example
 
-# Logs
+# LOGS
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# OS files
+# LOCAL FILES
+*.local
+
+# EDITORS / IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS FILES
 .DS_Store
 Thumbs.db
-
-#Ideas folder
-Idea/
-Idea/ss/ #Screenshots

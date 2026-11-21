@@ -126,9 +126,7 @@ def engineered_features(landmarks):
         landmarks
     )
 
-    # --------------------------------------------------------
     # Finger joint angle definitions
-    # --------------------------------------------------------
 
     angle_triplets = [
         # Thumb
@@ -159,9 +157,7 @@ def engineered_features(landmarks):
         for a, b, c in angle_triplets
     ]
 
-    # --------------------------------------------------------
     # Wrist-to-landmark distances
-    # --------------------------------------------------------
 
     wrist = xyz[0]
 
@@ -174,9 +170,7 @@ def engineered_features(landmarks):
         for i in range(1, 21)
     ]
 
-    # --------------------------------------------------------
     # Combine geometric features
-    # --------------------------------------------------------
 
     return np.concatenate(
         [
@@ -234,9 +228,7 @@ def make_feature_vector(
         Feature vector.
     """
 
-    # --------------------------------------------------------
     # NO HAND
-    # --------------------------------------------------------
 
     if landmarks is None:
 
@@ -254,9 +246,7 @@ def make_feature_vector(
             dtype=np.float32,
         )
 
-    # --------------------------------------------------------
     # V1
-    # --------------------------------------------------------
 
     if version == 1:
 
@@ -266,9 +256,7 @@ def make_feature_vector(
             .astype(np.float32)
         )
 
-    # --------------------------------------------------------
     # V2
-    # --------------------------------------------------------
 
     if version == 2:
 
@@ -280,9 +268,7 @@ def make_feature_vector(
             .astype(np.float32)
         )
 
-    # --------------------------------------------------------
     # V3
-    # --------------------------------------------------------
 
     if version == 3:
 
@@ -343,9 +329,7 @@ def make_feature_vector(
 
         return features
 
-    # --------------------------------------------------------
     # Unsupported version
-    # --------------------------------------------------------
 
     raise ValueError(
         f"Unsupported feature version: {version}. "
