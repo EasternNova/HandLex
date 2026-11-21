@@ -1,4 +1,4 @@
-# HandLex
+# HandLex-hhhh
 
 > Exploring sign-language hand-sign recognition using computer vision and machine learning.
 
