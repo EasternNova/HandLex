@@ -1,8 +1,6 @@
-
 # IDEAS
 MY_IDEAS/
 Idea/
-Idea/ss/
 
 # PYTHON
 __pycache__/
@@ -19,10 +17,6 @@ env/
 *.keras
 *.pkl
 *.pickle
-
-# MACHINE LEARNING DATA
-dataset/
-data/
 
 # Model files
 models/checkpoints/

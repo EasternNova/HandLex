@@ -560,10 +560,8 @@ def main(
                 )
             )
 
-            ==========
-            # HAND DETECTED
-            ==========
 
+            # HAND DETECTED
             if result.hand_landmarks:
 
                 landmarks = (
@@ -782,9 +780,9 @@ def main(
                     2,
                 )
 
-            ==========
+
             # NO HAND
-            ==========
+
 
             else:
 
@@ -820,9 +818,9 @@ def main(
                     2,
                 )
 
-            ==========
+
             # SENTENCE
-            ==========
+
 
             text = "".join(
                 sentence
