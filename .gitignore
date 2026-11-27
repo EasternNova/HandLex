@@ -63,4 +63,5 @@ lerna-debug.log*
 Thumbs.db
 
 #Dataset
-dataset/
+dataset
+dataset/ASL/asl_alphabet_train/
