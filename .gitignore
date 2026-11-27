@@ -63,5 +63,39 @@ lerna-debug.log*
 Thumbs.db
 
 #Dataset
-dataset
-dataset/ASL/asl_alphabet_train/
+#As directed by our professor, we will include the complete test folder, containing one image each for classes A to Z, del, nothing, and space. For the training folder, we will upload only one subfolder, containing around 3,000 images of "A" class.
+
+#The remaining dataset is not included to avoid uploading large files to the repository. The dataset can be downloaded from the following link: https://www.kaggle.com/datasets/grassknoted/asl-alphabet
+
+#dataset/ 
+#dataet/ASL/asl_alphabet_test/
+#dataset/ASL/asl_alphabet_train/
+#dataset/ASL/asl_alphabet_train/asl_alphabet_train/A/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/B/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/C/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/D/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/del/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/E/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/F/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/G/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/H/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/I/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/J/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/K/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/L/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/M/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/N/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/nothing/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/O/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/P/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/Q/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/R/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/S/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/space/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/T/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/U/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/V/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/W/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/X/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/Y/
+dataset/ASL/asl_alphabet_train/asl_alphabet_train/Z/
