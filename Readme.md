@@ -57,9 +57,11 @@ HandLex uses a combination of machine-learning libraries, computer-vision tools,
 | **Python Multipart** | Form-data processing | Supports multipart form-data requests, including image uploads to the API. |
 
 
-## 4. Repository Structure
 
-HandLex is organized into separate directories for the machine-learning model, backend API, frontend interface, dataset, and project configuration.
+
+## 4. Repository Structure
+ is organized into separate directories for the machine-learning model, backend API, frontend interface, dataset, and project configuration.
+
 
 ```text
 HandLex/
@@ -152,6 +154,8 @@ Model A uses an ASL Alphabet image dataset containing images of hand gestures re
 
 > **Dataset attribution and licensing are pending verification.** Before redistributing the dataset or publishing definitive attribution, confirm the original source, creator and license terms.
 
+![ASL Dataset Structure](Docs/DataSet.png)
+
 ### 5.2 Dataset Structure
 
 The dataset is organized into training and testing directories.
@@ -213,6 +217,8 @@ The preprocessing pipeline involves:
 4. Processing landmark information into numerical features.
 5. Preparing the extracted features for machine-learning classification.
 
+![Dataset Preparation Workflow](Docs/DataPreprocessing.png)
+
 ### 5.7 Train/Test Splitting
 
 For the reported Model A V6 evaluation, the data was divided using a stratified 80/20 train/test split.
@@ -267,6 +273,8 @@ The Home page serves as the main entry point to the HandLex website.
 
 It introduces the project, presents its purpose, and provides navigation to the main features of the application.
 
+![HandLex Home Page](Docs/FrontendHomePage.png)
+
 ### 6.6 Translate Page
 
 The Translate page provides the interface for interacting with the sign recognition functionality.
@@ -306,6 +314,8 @@ The development server allows the frontend to be accessed locally during develop
 HandLex uses FastAPI as its backend framework. The backend connects the frontend interface to the sign-recognition system and manages model operations and image prediction requests.
 
 The backend separates API routing and request handling from the model inference logic. This allows the API to interact with Model A through a dedicated model service.
+
+![HandLex System Architecture](Docs/HandLexArchitecture.png)
 
 #### 7.A.2 Backend Components
 
@@ -440,6 +450,8 @@ Model A uses hand landmarks detected by MediaPipe Hand Landmarker.
 MediaPipe provides 21 landmarks representing important points of the hand, including the wrist, finger joints and fingertips.
 
 Each landmark contains X, Y and Z coordinate information. These coordinates are processed and transformed into geometric features representing the hand's structure and spatial relationships.
+
+![Hand Landmark Extraction](Docs/HandLandmarkExtraction.png)
 
 The feature extraction process combines normalized landmark coordinates, joint-angle measurements and wrist-distance measurements, along with additional hand-related indicators.
 

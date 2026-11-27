@@ -1,1 +1,0 @@
-﻿"""HandLex Model A."""
